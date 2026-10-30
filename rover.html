@@ -6,10 +6,10 @@
 <title>Rover Academy · Python selection &amp; iteration</title>
 <style>
 :root{
-  --night:#16123a; --night2:#221c55; --teal:#22d3c5; --teal-d:#0e9f94; --orange:#ff8a3d; --pink:#ff5fa2;
-  --bg:#eef0f7; --card:#fff; --ink:#1b1834; --muted:#666483; --line:#dfe1ec;
+  --night:#0A1B2E; --night2:#163351; --gold:#C89B3C; --eblue:#2A5A8C; --teal:#22d3c5; --teal-d:#0e9f94; --orange:#ff8a3d; --pink:#ff5fa2;
+  --bg:#F7F8FA; --card:#fff; --ink:#1b1834; --muted:#666483; --line:#dfe1ec;
   --ok:#17a35a; --ok-l:#e2f7ea; --bad:#e0413a; --bad-l:#fdeceb; --info:#4b47c9; --info-l:#ecebff;
-  --ed-bg:#141129; --ed-gutter:#1d1940; --ed-ink:#ebe9ff;
+  --ed-bg:#0E2238; --ed-gutter:#163351; --ed-ink:#ebe9ff;
   --k:#ff7eb6; --b:#6fe3ff; --s:#c3f584; --n:#ffd166; --c:#8d89b8;
   --mono: ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
@@ -17,17 +17,17 @@
 html,body{margin:0;height:100%}
 body{background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;display:flex;flex-direction:column}
 button{font:inherit;cursor:pointer}
-header{background:linear-gradient(90deg,var(--night),#2b2170);color:#fff;display:flex;align-items:center;gap:16px;padding:8px 16px;flex-wrap:wrap}
+header{background:linear-gradient(90deg,#0A1B2E,#163351);border-bottom:4px solid var(--gold);color:#fff;display:flex;align-items:center;gap:16px;padding:8px 16px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;white-space:nowrap;letter-spacing:.01em}
 .brand small{display:block;font-weight:500;opacity:.75;font-size:13px;line-height:1.1}
 .dots{display:flex;gap:5px;flex-wrap:wrap;flex:1;justify-content:center;align-items:center}
 .dot{width:30px;height:30px;border-radius:9px;border:2px solid rgba(255,255,255,.35);background:transparent;color:#fff;font-size:13px;font-weight:800;padding:0}
-.dot.done{background:var(--teal-d);border-color:var(--teal)}
-.dot.cur{border-color:var(--orange);background:var(--orange);color:#2b1300;box-shadow:0 0 0 3px rgba(255,138,61,.35)}
+.dot.done{background:var(--eblue);border-color:#7fa8d6}
+.dot.cur{border-color:var(--gold);background:var(--gold);color:#0A1B2E;box-shadow:0 0 0 3px rgba(200,155,60,.35)}
 .stage-sep{width:2px;height:22px;background:rgba(255,255,255,.25);margin:0 4px}
 .progress{min-width:150px;font-size:14px;text-align:right}
 .bar{height:8px;background:rgba(255,255,255,.2);border-radius:6px;overflow:hidden;margin-top:4px}
-.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--orange));width:0;transition:width .4s}
+.bar>i{display:block;height:100%;background:var(--gold);width:0;transition:width .4s}
 main{flex:1;display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:14px;padding:14px;min-height:0}
 main.full{grid-template-columns:1fr}
 main.full #right{display:none}
@@ -65,22 +65,22 @@ pre.py{background:var(--ed-bg);color:var(--ed-ink);font:15px/1.6 var(--mono);pad
 .hint{background:#fff6ec;border:1px dashed var(--orange);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:15px}
 /* right side */
 #right{background:var(--ed-bg);color:var(--ed-ink)}
-.toolbar{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#0e0c20;flex-wrap:wrap}
+.toolbar{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#081626;flex-wrap:wrap}
 .worlds{display:flex;gap:6px;margin-right:auto;align-items:center}
-.wtab{border:1px solid #3a3570;background:#1d1940;color:#cfcbf5;border-radius:8px;padding:5px 10px;font-size:14px;font-weight:700}
+.wtab{border:1px solid #2c4f78;background:#163351;color:#cfcbf5;border-radius:8px;padding:5px 10px;font-size:14px;font-weight:700}
 .wtab.on{background:var(--teal);color:#06302c;border-color:var(--teal)}
 .wtab .r{margin-left:4px}
 .speed{display:flex;align-items:center;gap:6px;font-size:13px;color:#aaa6d6}
 .speed input{width:80px;accent-color:var(--teal)}
-.tb{border:0;border-radius:8px;padding:7px 14px;font-weight:800;font-size:15px;background:#2b2660;color:#ebe9ff}
+.tb{border:0;border-radius:8px;padding:7px 14px;font-weight:800;font-size:15px;background:#1f4268;color:#ebe9ff}
 .tb:hover{filter:brightness(1.15)}
 .tb.run{background:var(--teal);color:#06302c}
 .tb.stop{background:var(--bad);color:#fff}
 .tb:disabled{opacity:.4;cursor:not-allowed}
-.stagewrap{flex:0 0 auto;display:flex;justify-content:center;align-items:center;background:radial-gradient(ellipse at center,#241d5c 0%,#0e0b24 80%);padding:10px;position:relative;overflow:hidden}
+.stagewrap{flex:0 0 auto;display:flex;justify-content:center;align-items:center;background:radial-gradient(ellipse at center,#1d4470 0%,#0A1B2E 80%);padding:10px;position:relative;overflow:hidden}
 canvas#world{display:block;border-radius:12px;max-width:100%}
 .status{position:absolute;left:12px;bottom:12px;right:12px;display:flex;justify-content:center;pointer-events:none}
-.status span{background:rgba(10,8,30,.82);border:1px solid #3a3570;color:#fff;border-radius:10px;padding:6px 12px;font-size:15px;font-weight:700;backdrop-filter:blur(3px)}
+.status span{background:rgba(10,8,30,.82);border:1px solid #2c4f78;color:#fff;border-radius:10px;padding:6px 12px;font-size:15px;font-weight:700;backdrop-filter:blur(3px)}
 .status span.good{border-color:var(--teal);color:#bff8f2}
 .status span.bad{border-color:var(--bad);color:#ffd2cf}
 .codezone{flex:1;display:flex;flex-direction:column;min-height:150px}
@@ -98,16 +98,16 @@ canvas#world{display:block;border-radius:12px;max-width:100%}
 .pick{flex:1;overflow:auto;padding:12px 14px;font:16px/2 var(--mono);white-space:pre}
 .pick .ln{display:block;padding-left:2px;border-radius:4px}
 .pick .ln.hl{background:rgba(34,211,197,.18);outline:1px solid rgba(34,211,197,.55)}
-.gap{font:inherit;border:2px dashed #6e68b8;background:#221d4d;color:#fff;border-radius:7px;padding:0 10px;min-width:64px;line-height:1.5;vertical-align:baseline}
+.gap{font:inherit;border:2px dashed #5b86b8;background:#163351;color:#fff;border-radius:7px;padding:0 10px;min-width:64px;line-height:1.5;vertical-align:baseline}
 .gap.sel{border-color:var(--orange);border-style:solid;box-shadow:0 0 0 3px rgba(255,138,61,.3)}
 .gap.filled{border-style:solid;border-color:var(--teal);background:#163a44}
-.tray{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;background:#0e0c20;border-top:1px solid #2b2660;align-items:center}
+.tray{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;background:#081626;border-top:1px solid #1f4268;align-items:center}
 .tray .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8d89b8;margin-right:4px}
 .chip{border:0;border-radius:99px;padding:6px 14px;font:600 15px var(--mono);background:#f1f0ff;color:#1b1834;box-shadow:0 2px 0 #9a96d6}
 .chip:hover{transform:translateY(-1px)}
 .chip.blk{border-radius:8px;background:#fff0e3;box-shadow:0 2px 0 #e0a070}
 .chip.blk.ctl{background:#ffe3f0;box-shadow:0 2px 0 #e08ab3}
-.log{flex:0 0 auto;max-height:150px;overflow:auto;padding:8px 12px;font:14px/1.5 system-ui,sans-serif;background:#0b0a1a;border-top:1px solid #2b2660}
+.log{flex:0 0 auto;max-height:150px;overflow:auto;padding:8px 12px;font:14px/1.5 system-ui,sans-serif;background:#06121f;border-top:1px solid #1f4268}
 .log .err{color:#ffc9c4;background:rgba(224,65,58,.15);border-left:4px solid var(--bad);padding:6px 10px;border-radius:6px;margin:4px 0}
 .log .ok{color:#c4fff6;background:rgba(34,211,197,.12);border-left:4px solid var(--teal);padding:6px 10px;border-radius:6px;margin:4px 0}
 .log .sys{color:#8d89b8;font-style:italic}
@@ -524,7 +524,7 @@ function loop(){ R.raf=requestAnimationFrame(loop); draw(performance.now()); }
 function drawGround(c,w,h,S){
   for(let y=0;y<h;y++) for(let x=0;x<w;x++){
     const px=x*S,py=y*S;
-    c.fillStyle=(x+y)%2?"#2a2361":"#2f2869"; c.fillRect(px,py,S,S);
+    c.fillStyle=(x+y)%2?"#173a5e":"#1b4269"; c.fillRect(px,py,S,S);
     for(let k=0;k<3;k++){ if(rand(x,y,k)>.55){ const r=S*(.05+.07*rand(x,y,k+9)); const cx=px+S*(.15+.7*rand(x,y,k+3)), cy=py+S*(.15+.7*rand(x,y,k+5));
       c.fillStyle="rgba(10,6,40,.35)"; c.beginPath(); c.arc(cx,cy,r,0,7); c.fill();
       c.strokeStyle="rgba(170,160,255,.18)"; c.lineWidth=1; c.beginPath(); c.arc(cx-.5,cy-.5,r,3.6,5.9); c.stroke(); } }
@@ -874,14 +874,124 @@ function renderFinish(c){
   • An <code>if</code> inside a loop makes a new decision every time round, so one program works in <b>every</b> world.</div>
   <div class="cert"><div style="letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-size:13px">Rover Academy</div>
   <div class="big">Rover Pilot Licence</div><p>Awarded to</p>
-  <input id="nm" placeholder="type your name" value="${esc(state.name||"")}">
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><input id="nm" placeholder="type your name" value="${esc(state.name||"")}" style="width:min(260px,90%)"><input id="fm" placeholder="form" value="${esc(state.form||"")}" style="width:min(120px,60%)"></div>
   <p style="font-size:21px;margin-top:16px"><b>${done}</b> of ${items.length} missions · Select ${stage("select")} · Build ${stage("build")} · Write ${stage("write")}</p>
   <div class="checklist">${items.map((m,i)=>`<div><span class="${state.done[m.id]?'yes':'no'}">${state.done[m.id]?'✓':'○'}</span> ${i+1}. ${esc(m.title)}</div>`).join("")}</div>
   <p style="color:var(--muted);font-size:14px">${new Date().toLocaleString("en-GB",{dateStyle:"full",timeStyle:"short"})}</p></div>
-  <p style="text-align:center;margin-top:16px">Show this screen to your teacher. <button class="btn primary" onclick="window.print()">🖨 Print</button> <button class="btn" id="wipe">Start again</button></p>`;
+  <p style="text-align:center;margin-top:16px"><button class="btn primary" id="pdfbtn" style="font-size:18px;padding:12px 22px">📄 Download PDF report</button> <button class="btn" onclick="window.print()">🖨 Print</button><br><span id="pdfmsg" style="color:var(--bad);font-size:15px"></span></p><p style="text-align:center"> <button class="btn" id="wipe">Start again</button></p>`;
   $("#nm").addEventListener("input",e=>{ state.name=e.target.value; save(); });
-  let armed=false; $("#wipe").onclick=e=>{ if(!armed){ armed=true; e.target.textContent="Sure? This clears your work. Click again"; return; } state={cur:0,done:{},code:{},gaps:{},fails:{},hints:{},name:""}; save(); render(); };
+  $("#fm").addEventListener("input",e=>{ state.form=e.target.value; save(); });
+  $("#pdfbtn").onclick=()=>{ if(!(state.name||"").trim()||!(state.form||"").trim()){ $("#pdfmsg").textContent="Type your name and form above first."; return; } $("#pdfmsg").textContent=""; downloadRoverPDF(); };
+  let armed=false; $("#wipe").onclick=e=>{ if(!armed){ armed=true; e.target.textContent="Sure? This clears your work. Click again"; return; } state={cur:0,done:{},code:{},gaps:{},fails:{},hints:{},name:"",form:""}; save(); render(); };
   if(done===items.length) confetti(120);
+}
+/* ---------- tiny PDF writer (no libraries, works offline) ---------- */
+class MiniPDF {
+  constructor(){ this.pages = []; this.newPage(); }
+  newPage(){ this.cur = []; this.pages.push(this.cur); return this; }
+  static clean(s){
+    const map = {"–":"-","—":"-","‘":"'","’":"'","“":'"',"”":'"',"×":"x","…":"...","•":"-","→":"->","✓":"","★":"*"};
+    return String(s).replace(/[^\x20-\x7e]/g, ch => map[ch] ?? "").replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)");
+  }
+  static rgb(c){ return c.map(v => (v/255).toFixed(3)).join(" "); }
+  static width(s, size){ return String(s).length * size * 0.5; }
+  fit(s, size, maxW){ s = String(s); if (MiniPDF.width(s,size) <= maxW) return s; while (s.length > 3 && MiniPDF.width(s+"...",size) > maxW) s = s.slice(0,-1); return s + "..."; }
+  // y is measured from the TOP of an A4 page (842pt high)
+  text(x, y, s, {size=11, bold=false, color=[20,20,30], maxW=null}={}){
+    if (maxW) s = this.fit(s, size, maxW);
+    this.cur.push(`BT /${bold?"F2":"F1"} ${size} Tf ${MiniPDF.rgb(color)} rg ${x.toFixed(1)} ${(842-y).toFixed(1)} Td (${MiniPDF.clean(s)}) Tj ET`);
+  }
+  rect(x, y, w, h, color){ this.cur.push(`${MiniPDF.rgb(color)} rg ${x.toFixed(1)} ${(842-y-h).toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)} re f`); }
+  line(x1, y1, x2, y2, color=[200,200,210], w=0.8){ this.cur.push(`${MiniPDF.rgb(color)} RG ${w} w ${x1} ${842-y1} m ${x2} ${842-y2} l S`); }
+  output(){
+    let pdf = "%PDF-1.4\n"; const offs = [];
+    const add = body => { offs.push(pdf.length); pdf += `${offs.length} 0 obj\n${body}\nendobj\n`; };
+    const n = this.pages.length;
+    add("<< /Type /Catalog /Pages 2 0 R >>");
+    add(`<< /Type /Pages /Kids [${this.pages.map((_,i)=>`${5+2*i} 0 R`).join(" ")}] /Count ${n} >>`);
+    add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+    add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
+    this.pages.forEach((ops, i) => {
+      add(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${6+2*i} 0 R >>`);
+      const s = ops.join("\n");
+      add(`<< /Length ${s.length} >>\nstream\n${s}\nendstream`);
+    });
+    const xref = pdf.length;
+    pdf += `xref\n0 ${offs.length+1}\n0000000000 65535 f \n` + offs.map(o => String(o).padStart(10,"0") + " 00000 n \n").join("");
+    pdf += `trailer\n<< /Size ${offs.length+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
+    return pdf;
+  }
+  download(filename){
+    const blob = new Blob([this.output()], {type:"application/pdf"});
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = filename;
+    document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+}
+/* Standard report: header band, student details, two progress bars, a results table. */
+function buildReport({title, subtitle, name, form, bars, columns, rows, footer}){
+  const NAVY=[10,27,46], GOLD=[200,155,60], MID=[22,51,81], GREY=[110,115,125], OK=[31,122,77], BAD=[179,38,30];
+  const pdf = new MiniPDF();
+  const header = () => {
+    pdf.rect(0, 0, 595, 78, NAVY); pdf.rect(0, 78, 595, 4, GOLD);
+    pdf.text(40, 38, title, {size:20, bold:true, color:[255,255,255]});
+    pdf.text(40, 60, subtitle, {size:11, color:[227,199,131]});
+  };
+  header();
+  let y = 112;
+  pdf.text(40, y, "Name:", {size:11, bold:true, color:MID}); pdf.text(90, y, name || "(not given)", {size:11});
+  pdf.text(320, y, "Form:", {size:11, bold:true, color:MID}); pdf.text(362, y, form || "(not given)", {size:11});
+  y += 18;
+  pdf.text(40, y, "Report made:", {size:11, bold:true, color:MID});
+  pdf.text(120, y, new Date().toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}), {size:11});
+  y += 30;
+  for (const b of bars){
+    const pct = b.total ? Math.round(100*b.value/b.total) : 0;
+    pdf.text(40, y, b.label, {size:12, bold:true, color:NAVY});
+    pdf.text(555 - MiniPDF.width(`${b.value} / ${b.total}  (${pct}%)`, 12)*1.05, y, `${b.value} / ${b.total}  (${pct}%)`, {size:12, bold:true, color:NAVY});
+    y += 8; pdf.rect(40, y, 515, 12, [228,232,238]); if (pct) pdf.rect(40, y, 515*pct/100, 12, b.color || OK);
+    y += 30;
+  }
+  const drawHead = () => {
+    pdf.rect(40, y, 515, 20, MID);
+    columns.forEach(c => pdf.text(c.x, y+14, c.label, {size:10, bold:true, color:[255,255,255]}));
+    y += 20;
+  };
+  drawHead();
+  rows.forEach((r, i) => {
+    if (y > 790){ pdf.newPage(); header(); y = 110; drawHead(); }
+    if (i % 2) pdf.rect(40, y, 515, 18, [244,246,250]);
+    columns.forEach((c, k) => {
+      const v = r.cells[k];
+      const col = k === r.statusCol ? (r.ok ? OK : BAD) : [30,30,40];
+      pdf.text(c.x, y+13, v, {size:9.5, bold:k===r.statusCol, color:col, maxW:c.w});
+    });
+    y += 18;
+  });
+  pdf.line(40, y, 555, y);
+  pdf.text(40, 818, footer, {size:8.5, color:GREY});
+  return pdf;
+}
+
+function downloadRoverPDF(){
+  const items=M.filter(m=>m.mode!=="finish"&&m.mode!=="play");
+  const stageName={select:"1 Select",build:"2 Build",write:"3 Write"};
+  const done=items.filter(m=>state.done[m.id]).length;
+  const rows=items.map((m,i)=>{ const ok=!!state.done[m.id], f=state.fails[m.id]||0;
+    return {cells:[String(i+1), stageName[m.mode], m.title, ok?(f?`Complete (${f} failed run${f>1?"s":""} first)`:"Complete first time"):(f?`Not yet (${f} failed run${f>1?"s":""})`:"Not attempted"), String(m.worlds.length)], statusCol:3, ok}; });
+  const byStage=s=>{ const it=items.filter(m=>m.mode===s); return [it.filter(m=>state.done[m.id]).length, it.length]; };
+  const [s1,t1]=byStage("select"), [s2,t2]=byStage("build"), [s3,t3]=byStage("write");
+  const pdf=buildReport({
+    title:"Rover Academy - Mission Report",
+    subtitle:`Python selection and iteration robot lab   |   Select ${s1}/${t1}   Build ${s2}/${t2}   Write ${s3}/${t3}`,
+    name:state.name, form:state.form,
+    bars:[{label:"Missions completed",value:done,total:items.length,color:[31,122,77]},
+          {label:"Completed first time (no failed runs)",value:items.filter(m=>state.done[m.id]&&!(state.fails[m.id])).length,total:items.length,color:[42,90,140]}],
+    columns:[{label:"#",x:46,w:20},{label:"Stage",x:70,w:60},{label:"Mission",x:135,w:170},{label:"Result",x:310,w:200},{label:"Worlds",x:512,w:40}],
+    rows,
+    footer:"Rover Academy - eltham-college-cs.github.io/python-lab/rover.html - generated in the student's browser"
+  });
+  const safe=(state.name||"student").trim().replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"")||"student";
+  pdf.download(`Rover-Academy-Report-${safe}.pdf`);
 }
 function confetti(n){
   const box=document.createElement("div"); box.className="confetti"; const cols=["#22d3c5","#ff8a3d","#ff5fa2","#6fe3ff","#ffd166"];

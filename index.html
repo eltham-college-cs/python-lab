@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Year 7 Python · Eltham College Computer Science</title>
 <style>
-:root{--maroon:#7b1e3a;--gold:#f5b301;--night:#16123a;--teal:#22d3c5;--bg:#f4f1ec;--ink:#1e1b24;--muted:#6a6472}
+:root{--navy:#0A1B2E;--mid:#163351;--gold:#C89B3C;--blue:#2A5A8C;--bg:#F7F8FA;--ink:#1A1D21;--muted:#555D68}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-header{background:var(--maroon);color:#fff;padding:28px 16px}
+header{background:linear-gradient(90deg,var(--navy),var(--mid));color:#fff;padding:28px 16px;border-bottom:5px solid var(--gold)}
 header div,main{max-width:960px;margin:0 auto}
 h1{margin:0;font-size:30px}
-header p{margin:6px 0 0;opacity:.85}
+header p{margin:6px 0 0;color:#E3C783}
 main{padding:24px 16px 40px;display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 a.card{display:flex;flex-direction:column;background:#fff;border-radius:16px;padding:22px;text-decoration:none;color:inherit;box-shadow:0 1px 3px rgba(0,0,0,.08);border-top:6px solid var(--c);transition:transform .15s,box-shadow .15s}
 a.card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.1)}
@@ -25,16 +25,22 @@ footer{max-width:960px;margin:0 auto;padding:0 16px 30px;color:var(--muted);font
 <body>
 <header><div><h1>Year 7 Python</h1><p>Eltham College Computer Science · practise in your browser, no login needed</p></div></header>
 <main>
-  <a class="card" href="lesson7.html" style="--c:#7b1e3a">
+  <a class="card" href="lesson7.html" style="--c:#0A1B2E">
     <span class="tag">Lesson 7</span>
     <h2>Loops that make decisions</h2>
     <p>Put an <b>if</b> inside a <b>for</b> loop. Recap quiz, trace table, and 8 auto-checked coding challenges from MUST to COULD.</p>
     <span class="go">Start lesson →</span>
   </a>
-  <a class="card" href="rover.html" style="--c:#0e9f94">
-    <span class="tag">Robotics playground</span>
+  <a class="card" href="homework.html" style="--c:#C89B3C">
+    <span class="tag">Homework</span>
+    <h2>Recap quiz: Lessons 3–7</h2>
+    <p>15 quiz questions and 3 coding tasks on input, if / else, elif and for loops. Download a <b>PDF report</b> of your completion rate at the end.</p>
+    <span class="go">Start homework →</span>
+  </a>
+  <a class="card" href="rover.html" style="--c:#2A5A8C">
+    <span class="tag">Robot lab</span>
     <h2>Rover Academy</h2>
-    <p>Program a Moon rover with selection and iteration. 10 missions: select the code, build it from blocks, then write your own.</p>
+    <p>Program a Moon rover with selection and iteration. 10 missions: select the code, build it from blocks, then write your own. Download a PDF mission report.</p>
     <span class="go">Launch rover →</span>
   </a>
 </main>

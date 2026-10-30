@@ -6,10 +6,10 @@
 <title>Year 7 · Lesson 7 · Loops that make decisions</title>
 <style>
 :root{
-  --maroon:#7b1e3a; --maroon-d:#5a1229; --gold:#f5b301; --gold-l:#fff3cc;
-  --bg:#f4f1ec; --card:#ffffff; --ink:#1e1b24; --muted:#6a6472; --line:#e3ddd4;
+  --maroon:#0A1B2E; --maroon-d:#163351; --gold:#C89B3C; --gold-l:#FBF3E0; --blue:#2A5A8C;
+  --bg:#F7F8FA; --card:#ffffff; --ink:#1A1D21; --muted:#555D68; --line:#D7E3EF;
   --ok:#1f8a4c; --ok-l:#e3f6ea; --bad:#c0392b; --bad-l:#fdeaea; --info:#2563a8; --info-l:#e6f0fb;
-  --ed-bg:#1d2130; --ed-gutter:#262b3d; --ed-ink:#e8e6f0;
+  --ed-bg:#0E2238; --ed-gutter:#163351; --ed-ink:#e8e6f0;
   --k:#ff8fb1; --b:#7fd6ff; --s:#b5e48c; --n:#ffcf70; --c:#8a93ad; --op:#f5f5f5;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 }
@@ -18,14 +18,14 @@ html,body{margin:0;height:100%}
 body{background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;display:flex;flex-direction:column}
 button{font:inherit;cursor:pointer}
 /* ---------- header ---------- */
-header{background:var(--maroon);color:#fff;display:flex;align-items:center;gap:16px;padding:8px 16px;flex-wrap:wrap}
+header{background:var(--maroon);border-bottom:4px solid var(--gold);color:#fff;display:flex;align-items:center;gap:16px;padding:8px 16px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;white-space:nowrap}
 .brand .logo{width:34px;height:34px;border-radius:8px;background:var(--gold);display:grid;place-items:center;color:var(--maroon);font-weight:900;font-family:var(--mono)}
 .brand small{display:block;font-weight:500;opacity:.8;font-size:13px;line-height:1.1}
 .dots{display:flex;gap:6px;flex-wrap:wrap;flex:1;justify-content:center}
 .dot{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.45);background:transparent;color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center;padding:0}
 .dot.done{background:var(--ok);border-color:var(--ok)}
-.dot.cur{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,179,1,.45);background:var(--gold);color:var(--maroon)}
+.dot.cur{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,155,60,.45);background:var(--gold);color:var(--maroon)}
 .dot.done.cur{background:var(--gold)}
 .progress{min-width:150px;font-size:14px;text-align:right}
 .bar{height:8px;background:rgba(255,255,255,.25);border-radius:6px;overflow:hidden;margin-top:4px}
@@ -100,9 +100,9 @@ ul.obj li{margin:8px 0;display:flex;gap:10px;align-items:baseline}
 .ed textarea::selection{background:rgba(127,214,255,.3);color:transparent}
 .ed textarea[readonly]{caret-color:transparent}
 .t-k{color:var(--k);font-weight:600}.t-b{color:var(--b)}.t-s{color:var(--s)}.t-n{color:var(--n)}.t-c{color:var(--c);font-style:italic}
-.ig{box-shadow:inset 1px 0 0 rgba(245,179,1,.35)}
+.ig{box-shadow:inset 1px 0 0 rgba(200,155,60,.35)}
 .ig2{box-shadow:inset 1px 0 0 rgba(127,214,255,.4)}
-.hlline{background:rgba(245,179,1,.22);display:inline-block;width:100%;outline:1px solid rgba(245,179,1,.6)}
+.hlline{background:rgba(200,155,60,.22);display:inline-block;width:100%;outline:1px solid rgba(200,155,60,.6)}
 .conhead{display:flex;align-items:center;gap:8px;padding:6px 12px;background:#151826;font-size:13px;color:#99a;text-transform:uppercase;letter-spacing:.08em;border-top:1px solid #2c3247}
 .conhead span{margin-right:auto}
 .console{flex:1 1 45%;overflow:auto;padding:10px 14px;font:15px/1.5 var(--mono);background:#11131d;min-height:120px}
@@ -127,7 +127,7 @@ ul.obj li{margin:8px 0;display:flex;gap:10px;align-items:baseline}
 .trace table{border-collapse:collapse;width:100%;font:16px var(--mono);background:#151826;border-radius:10px;overflow:hidden}
 .trace th{background:#2c3247;color:#dfe3f3;padding:6px 10px;font:600 14px system-ui;text-align:left}
 .trace td{border-top:1px solid #2c3247;padding:6px 10px;height:34px;color:#f0f0f0}
-.trace td.new{background:rgba(245,179,1,.3);animation:pop .4s}
+.trace td.new{background:rgba(200,155,60,.3);animation:pop .4s}
 .trace td.T{color:#7ee2a1}.trace td.F{color:#ff9d8f}
 @keyframes pop{from{transform:scale(1.15)}to{transform:none}}
 .narr{background:#262b3d;border-left:5px solid var(--gold);border-radius:8px;padding:10px 14px;margin:12px 0;font-size:16px;min-height:52px}
@@ -989,7 +989,7 @@ function renderFinish(c){
 /* ---------- fx ---------- */
 function confetti(n){
   const box = document.createElement("div"); box.className = "confetti";
-  const cols = ["#f5b301","#7b1e3a","#2e9a5a","#7fd6ff","#ff8fb1"];
+  const cols = ["#C89B3C","#0A1B2E","#2e9a5a","#7fd6ff","#ff8fb1"];
   for (let i=0;i<n;i++){
     const p = document.createElement("i");
     p.style.left = Math.random()*100 + "vw"; p.style.background = cols[i%cols.length];

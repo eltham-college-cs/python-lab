@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rover Academy · Python selection &amp; iteration</title>
+<style>
+:root{
+  --night:#16123a; --night2:#221c55; --teal:#22d3c5; --teal-d:#0e9f94; --orange:#ff8a3d; --pink:#ff5fa2;
+  --bg:#eef0f7; --card:#fff; --ink:#1b1834; --muted:#666483; --line:#dfe1ec;
+  --ok:#17a35a; --ok-l:#e2f7ea; --bad:#e0413a; --bad-l:#fdeceb; --info:#4b47c9; --info-l:#ecebff;
+  --ed-bg:#141129; --ed-gutter:#1d1940; --ed-ink:#ebe9ff;
+  --k:#ff7eb6; --b:#6fe3ff; --s:#c3f584; --n:#ffd166; --c:#8d89b8;
+  --mono: ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;display:flex;flex-direction:column}
+button{font:inherit;cursor:pointer}
+header{background:linear-gradient(90deg,var(--night),#2b2170);color:#fff;display:flex;align-items:center;gap:16px;padding:8px 16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;white-space:nowrap;letter-spacing:.01em}
+.brand small{display:block;font-weight:500;opacity:.75;font-size:13px;line-height:1.1}
+.dots{display:flex;gap:5px;flex-wrap:wrap;flex:1;justify-content:center;align-items:center}
+.dot{width:30px;height:30px;border-radius:9px;border:2px solid rgba(255,255,255,.35);background:transparent;color:#fff;font-size:13px;font-weight:800;padding:0}
+.dot.done{background:var(--teal-d);border-color:var(--teal)}
+.dot.cur{border-color:var(--orange);background:var(--orange);color:#2b1300;box-shadow:0 0 0 3px rgba(255,138,61,.35)}
+.stage-sep{width:2px;height:22px;background:rgba(255,255,255,.25);margin:0 4px}
+.progress{min-width:150px;font-size:14px;text-align:right}
+.bar{height:8px;background:rgba(255,255,255,.2);border-radius:6px;overflow:hidden;margin-top:4px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--orange));width:0;transition:width .4s}
+main{flex:1;display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:14px;padding:14px;min-height:0}
+main.full{grid-template-columns:1fr}
+main.full #right{display:none}
+.pane{background:var(--card);border-radius:16px;box-shadow:0 1px 3px rgba(20,10,60,.1);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+#left .scroll{flex:1;overflow:auto;padding:20px 24px}
+main.full #left .scroll{max-width:900px;margin:0 auto;width:100%}
+#left h1{font-size:27px;line-height:1.2;margin:6px 0 10px;color:var(--night)}
+#left h2{font-size:17px;margin:18px 0 6px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+#left p{margin:8px 0}
+.pills{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pill{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 10px;border-radius:99px}
+.pill.SELECT{background:#dff8f5;color:#0b6b63}.pill.BUILD{background:#fff0e3;color:#8a3d00}.pill.WRITE{background:#ffe3f0;color:#94104e}
+.pill.SEL{background:var(--info-l);color:var(--info)}.pill.IT{background:#e9f5ff;color:#1f5f99}.pill.START{background:#222;color:#fff}
+.stars{color:var(--orange);font-size:17px;letter-spacing:2px}
+.goals{list-style:none;padding:0;margin:6px 0}
+.goals li{display:flex;gap:10px;align-items:center;padding:6px 10px;border-radius:10px;background:#f6f6fb;margin:5px 0;font-size:16px}
+.goals svg{flex:none}
+.cmds{display:grid;gap:6px;margin:6px 0}
+.cmd{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline;font-size:15px}
+.cmd code{white-space:nowrap}
+code{font-family:var(--mono);background:#efeef8;padding:1px 6px;border-radius:5px;font-size:.92em}
+.kw{border:2px solid var(--teal);background:#effcfa;border-radius:12px;padding:10px 14px;margin:12px 0}
+.kw b{color:var(--teal-d)}
+.kw .tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--teal-d)}
+.tip{background:var(--info-l);border-left:5px solid var(--info);border-radius:8px;padding:10px 14px;margin:12px 0}
+pre.py{background:var(--ed-bg);color:var(--ed-ink);font:15px/1.6 var(--mono);padding:12px 14px;border-radius:10px;overflow:auto;margin:10px 0}
+.navrow{display:flex;justify-content:space-between;gap:10px;padding:12px 18px;border-top:1px solid var(--line);background:#fafaff}
+.btn{border:0;border-radius:10px;padding:9px 18px;font-weight:700;background:#e8e8f2;color:var(--ink)}
+.btn:hover{filter:brightness(.96)}
+.btn.primary{background:var(--night);color:#fff}
+.btn.orange{background:var(--orange);color:#2b1300}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{padding:6px 12px;font-size:14px}
+.hints{margin-top:14px}
+.hint{background:#fff6ec;border:1px dashed var(--orange);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:15px}
+/* right side */
+#right{background:var(--ed-bg);color:var(--ed-ink)}
+.toolbar{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#0e0c20;flex-wrap:wrap}
+.worlds{display:flex;gap:6px;margin-right:auto;align-items:center}
+.wtab{border:1px solid #3a3570;background:#1d1940;color:#cfcbf5;border-radius:8px;padding:5px 10px;font-size:14px;font-weight:700}
+.wtab.on{background:var(--teal);color:#06302c;border-color:var(--teal)}
+.wtab .r{margin-left:4px}
+.speed{display:flex;align-items:center;gap:6px;font-size:13px;color:#aaa6d6}
+.speed input{width:80px;accent-color:var(--teal)}
+.tb{border:0;border-radius:8px;padding:7px 14px;font-weight:800;font-size:15px;background:#2b2660;color:#ebe9ff}
+.tb:hover{filter:brightness(1.15)}
+.tb.run{background:var(--teal);color:#06302c}
+.tb.stop{background:var(--bad);color:#fff}
+.tb:disabled{opacity:.4;cursor:not-allowed}
+.stagewrap{flex:0 0 auto;display:flex;justify-content:center;align-items:center;background:radial-gradient(ellipse at center,#241d5c 0%,#0e0b24 80%);padding:10px;position:relative;overflow:hidden}
+canvas#world{display:block;border-radius:12px;max-width:100%}
+.status{position:absolute;left:12px;bottom:12px;right:12px;display:flex;justify-content:center;pointer-events:none}
+.status span{background:rgba(10,8,30,.82);border:1px solid #3a3570;color:#fff;border-radius:10px;padding:6px 12px;font-size:15px;font-weight:700;backdrop-filter:blur(3px)}
+.status span.good{border-color:var(--teal);color:#bff8f2}
+.status span.bad{border-color:var(--bad);color:#ffd2cf}
+.codezone{flex:1;display:flex;flex-direction:column;min-height:150px}
+.edwrap{flex:1;display:flex;min-height:120px;overflow:hidden;position:relative}
+.gutter{background:var(--ed-gutter);color:#625d9a;font:15px/1.6 var(--mono);padding:12px 8px;text-align:right;min-width:40px;user-select:none;overflow:hidden;white-space:pre}
+.ed{position:relative;flex:1;overflow:hidden}
+.ed pre,.ed textarea{position:absolute;inset:0;margin:0;padding:12px 14px;font:15px/1.6 var(--mono);white-space:pre;tab-size:4;border:0;overflow:auto}
+.ed pre{pointer-events:none;color:var(--ed-ink)}
+.ed textarea{background:transparent;color:transparent;caret-color:#fff;resize:none;outline:none}
+.ed textarea::selection{background:rgba(111,227,255,.3);color:transparent}
+.t-k{color:var(--k);font-weight:600}.t-b{color:var(--b)}.t-s{color:var(--s)}.t-n{color:var(--n)}.t-c{color:var(--c);font-style:italic}.t-r{color:#ffb37a}
+.ig{box-shadow:inset 1px 0 0 rgba(34,211,197,.35)}.ig2{box-shadow:inset 1px 0 0 rgba(255,138,61,.4)}
+.hlline{background:rgba(34,211,197,.18);display:inline-block;width:100%;outline:1px solid rgba(34,211,197,.55)}
+/* pick mode */
+.pick{flex:1;overflow:auto;padding:12px 14px;font:16px/2 var(--mono);white-space:pre}
+.pick .ln{display:block;padding-left:2px;border-radius:4px}
+.pick .ln.hl{background:rgba(34,211,197,.18);outline:1px solid rgba(34,211,197,.55)}
+.gap{font:inherit;border:2px dashed #6e68b8;background:#221d4d;color:#fff;border-radius:7px;padding:0 10px;min-width:64px;line-height:1.5;vertical-align:baseline}
+.gap.sel{border-color:var(--orange);border-style:solid;box-shadow:0 0 0 3px rgba(255,138,61,.3)}
+.gap.filled{border-style:solid;border-color:var(--teal);background:#163a44}
+.tray{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;background:#0e0c20;border-top:1px solid #2b2660;align-items:center}
+.tray .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8d89b8;margin-right:4px}
+.chip{border:0;border-radius:99px;padding:6px 14px;font:600 15px var(--mono);background:#f1f0ff;color:#1b1834;box-shadow:0 2px 0 #9a96d6}
+.chip:hover{transform:translateY(-1px)}
+.chip.blk{border-radius:8px;background:#fff0e3;box-shadow:0 2px 0 #e0a070}
+.chip.blk.ctl{background:#ffe3f0;box-shadow:0 2px 0 #e08ab3}
+.log{flex:0 0 auto;max-height:150px;overflow:auto;padding:8px 12px;font:14px/1.5 system-ui,sans-serif;background:#0b0a1a;border-top:1px solid #2b2660}
+.log .err{color:#ffc9c4;background:rgba(224,65,58,.15);border-left:4px solid var(--bad);padding:6px 10px;border-radius:6px;margin:4px 0}
+.log .ok{color:#c4fff6;background:rgba(34,211,197,.12);border-left:4px solid var(--teal);padding:6px 10px;border-radius:6px;margin:4px 0}
+.log .sys{color:#8d89b8;font-style:italic}
+.log .out{font-family:var(--mono);color:#fff;white-space:pre-wrap}
+.log b{color:#fff}
+/* finish */
+.cert{border:3px solid var(--night);border-radius:18px;padding:24px;text-align:center;background:linear-gradient(160deg,#fff,#f1fffd)}
+.cert input{font:inherit;font-size:22px;text-align:center;border:0;border-bottom:2px solid var(--teal);background:transparent;outline:none;width:min(360px,90%)}
+.cert .big{font-size:40px;font-weight:900;color:var(--night)}
+.checklist{columns:2;text-align:left;margin:16px auto;max-width:620px;font-size:15px}
+.checklist div{break-inside:avoid;padding:2px 0}
+.yes{color:var(--ok);font-weight:800}.no{color:#bbb;font-weight:800}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
+.confetti i{position:absolute;top:-20px;width:10px;height:14px;border-radius:2px;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg);opacity:.8}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:10px;z-index:60;font-size:15px}
+@media (max-width:900px){main{grid-template-columns:1fr;overflow:auto}#right{min-height:760px}.dots{display:none}}
+@media print{header,.navrow,#right,.btn{display:none!important}main{display:block}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><svg width="38" height="38" viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="9" width="28" height="22" rx="7" fill="#ff8a3d"/><rect x="2" y="8" width="7" height="10" rx="3" fill="#0e0b24"/><rect x="31" y="8" width="7" height="10" rx="3" fill="#0e0b24"/><rect x="2" y="22" width="7" height="10" rx="3" fill="#0e0b24"/><rect x="31" y="22" width="7" height="10" rx="3" fill="#0e0b24"/><rect x="12" y="4" width="16" height="9" rx="4" fill="#22d3c5"/><circle cx="16" cy="8.5" r="2" fill="#0e0b24"/><circle cx="24" cy="8.5" r="2" fill="#0e0b24"/></svg>
+  <div>Rover Academy<small>Python · selection &amp; iteration</small></div></div>
+  <nav class="dots" id="dots" aria-label="Missions"></nav>
+  <div class="progress"><span id="progtxt"></span><div class="bar"><i id="progbar"></i></div></div>
+</header>
+<main id="main">
+  <section class="pane" id="left">
+    <div class="scroll" id="content"></div>
+    <div class="navrow">
+      <button class="btn" id="prev">← Back</button>
+      <span id="slideno" style="align-self:center;color:var(--muted);font-size:14px"></span>
+      <button class="btn primary" id="next">Next →</button>
+    </div>
+  </section>
+  <section class="pane" id="right"></section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js" onerror="document.write('<script src=&quot;https://unpkg.com/skulpt@1.2.0/dist/skulpt.min.js&quot;><\/script>')"></script>
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js" onerror="document.write('<script src=&quot;https://unpkg.com/skulpt@1.2.0/dist/skulpt-stdlib.js&quot;><\/script>')"></script>
+<script>
+"use strict";
+/* =====================================================================
+   COMMANDS the rover understands
+   ===================================================================== */
+const CMD = {
+  move_forward:{sig:"move_forward()", txt:"drive forward one square"},
+  turn_left:{sig:"turn_left()", txt:"turn 90° to the left (stay on the square)"},
+  turn_right:{sig:"turn_right()", txt:"turn 90° to the right"},
+  collect:{sig:"collect()", txt:"pick up the crystal you are standing on"},
+  drill:{sig:"drill()", txt:"drill the ice you are standing on"},
+  blast:{sig:"blast()", txt:"blast the rock in front of you"},
+  place_beacon:{sig:"place_beacon()", txt:"drop a beacon on this square"},
+  tile:{sig:"tile()", txt:'sensor: gives <code>"crystal"</code>, <code>"ice"</code> or <code>"empty"</code> for the square you are on', sensor:true},
+  rock_ahead:{sig:"rock_ahead()", txt:"sensor: <code>True</code> if a rock is right in front of you", sensor:true}
+};
+
+/* =====================================================================
+   MISSIONS — edit here.
+   map: S start · . ground · C crystal · I ice · R rock · B landing pad (finish here) · F beacon spot
+   mode: play | select | build | write
+   goals: beacon (finish on B) · crystals · ice · flags
+   ===================================================================== */
+const COURSE = {
+  id:"rover-academy-v1",
+  missions:[
+  { id:"hello", mode:"play", title:"Meet your rover", pills:["START"], cmds:["move_forward","turn_left","turn_right"],
+    body:`<p>Your rover is on the Moon. It only understands <b>Python</b>.</p>
+<p>Every mission has a goal. You'll start by <b>selecting</b> the right code, then <b>build</b> programs from blocks, then <b>write</b> your own.</p>
+<div class="tip"><b>Try it:</b> press <b>▶ Run</b>. Then change the code, for example add <code>turn_left()</code>, and run it again. Nothing can break!</div>
+<div class="kw"><span class="tag">Key word</span><br><b>Algorithm</b>: a set of step-by-step instructions to solve a problem.</div>`,
+    starter:`move_forward()
+move_forward()
+turn_right()
+move_forward()
+`,
+    worlds:[{map:["S.....","..C...","......","...R..","......"],dir:1}], goals:[] },
+
+  /* ---------------- STAGE 1: SELECT ---------------- */
+  { id:"m1", mode:"select", title:"Reach the landing pad", pills:["SELECT","IT"], stars:1, cmds:["move_forward"],
+    body:`<p>Drive the rover onto the glowing <b>landing pad</b>.</p>
+<p>A <code>for</code> loop repeats the code indented under it. Pick how many times it should repeat.</p>
+<div class="tip">Click a grey gap, then click an answer below the code. Count the squares!</div>`,
+    template:`for i in range({{0}}):
+    move_forward()`,
+    chips:["3","4","5","6"],
+    worlds:[{map:["........","S....B..","........"],dir:1}], goals:["beacon"],
+    hints:["Count the squares between the rover and the pad: each move_forward() is one square."],
+    solution:`for i in range(5):
+    move_forward()` },
+
+  { id:"m2", mode:"select", title:"Crystal row", pills:["SELECT","IT"], stars:1, cmds:["move_forward","collect","turn_left"],
+    body:`<p>Pick up all 4 crystals.</p><p>The loop runs 4 times. What should the rover do <b>each time round</b>? Order matters!</p>`,
+    template:`for i in range(4):
+    {{0}}
+    {{1}}`,
+    chips:["move_forward()","collect()","turn_left()"],
+    worlds:[{map:["........","SCCCC...","........"],dir:1}], goals:["crystals"],
+    hints:["The rover starts on an empty square. It needs to move before it can collect.","Gap 1: move_forward(). Gap 2: collect()."],
+    solution:`for i in range(4):
+    move_forward()
+    collect()` },
+
+  { id:"m3", mode:"select", title:"Scan before you grab", pills:["SELECT","SEL"], stars:1, cmds:["move_forward","collect","tile"],
+    body:`<p>This time the crystals are in <b>different places</b> in each world. Look at the <b>World 1, 2, 3</b> buttons above the map.</p>
+<p>If the rover tries to <code>collect()</code> on an empty square, it crashes. So it must <b>check first</b> with the sensor <code>tile()</code>.</p>
+<div class="kw"><span class="tag">Key word</span><br><b>Selection</b>: the program chooses what to do, using <code>if</code>. The code under the <code>if</code> only runs when the condition is <code>True</code>.</div>
+<div class="tip">Your code has to work in <b>all three worlds</b>. That's why we need <code>if</code>!</div>`,
+    template:`for i in range(6):
+    move_forward()
+    if tile() == {{0}}:
+        collect()`,
+    chips:['"crystal"','"ice"','"empty"','"rock"'],
+    worlds:[{map:["........","SC.C..C.","........"],dir:1},{map:["........","S.CC.C..","........"],dir:1},{map:["........","S..C.CC.","........"],dir:1}],
+    goals:["crystals"],
+    hints:["tile() tells you what's under the rover. When should it collect?"],
+    solution:`for i in range(6):
+    move_forward()
+    if tile() == "crystal":
+        collect()` },
+
+  { id:"m4", mode:"select", title:"Crystal or ice?", pills:["SELECT","SEL"], stars:2, cmds:["move_forward","collect","drill","tile"],
+    body:`<p>Every square has either a <b>crystal</b> or a block of <b>ice</b>. Collect every crystal and drill every bit of ice.</p>
+<p>Which keyword means <i>"otherwise, do this"</i>?</p>`,
+    template:`for i in range(6):
+    move_forward()
+    if tile() == "crystal":
+        collect()
+    {{0}}
+        drill()`,
+    chips:["else:","elif:","if:","for:"],
+    worlds:[{map:["........","SCICCII.","........"],dir:1},{map:["........","SIICICC.","........"],dir:1},{map:["........","SCCIICI.","........"],dir:1}],
+    goals:["crystals","ice"],
+    hints:["There are only two choices on each square. If it's not a crystal, it must be ice."],
+    solution:`for i in range(6):
+    move_forward()
+    if tile() == "crystal":
+        collect()
+    else:
+        drill()` },
+
+  /* ---------------- STAGE 2: BUILD ---------------- */
+  { id:"m5", mode:"build", title:"The L-shape", pills:["BUILD","IT"], stars:2, cmds:["move_forward","turn_left","turn_right"],
+    body:`<p>Now <b>you</b> build the program. Click a block to add it on a new line under your cursor. Use <b>Tab</b> / <b>Shift+Tab</b> to change the indentation.</p>
+<p>Get to the landing pad using <b>two loops</b>.</p>
+<div class="tip">Code that is indented under a <code>for</code> repeats. Code that isn't indented runs once.</div>`,
+    blocks:["for i in range(3):","for i in range(4):","move_forward()","turn_left()","turn_right()"],
+    starter:``,
+    worlds:[{map:["S......",".R.....","......R","..R....","...B...","......."],dir:1}],
+    goals:["beacon"], requires:[{re:/\bfor\b[\s\S]*\bfor\b/,msg:"Use <b>two</b> <code>for</code> loops."}],
+    hints:["Drive 3 squares right, turn, then drive 4 squares down.","turn_right() should <b>not</b> be indented: it only happens once.","for i in range(3): / (indented) move_forward() / turn_right() / for i in range(4): / (indented) move_forward()"],
+    solution:`for i in range(3):
+    move_forward()
+turn_right()
+for i in range(4):
+    move_forward()
+` },
+
+  { id:"m6", mode:"build", title:"Three kinds of square", pills:["BUILD","SEL"], stars:2, cmds:["move_forward","collect","drill","tile"],
+    body:`<p>Some squares have crystals, some have ice and some are <b>empty</b>. Collect the crystals and drill the ice. Do nothing on empty squares.</p>
+<div class="kw"><span class="tag">Key word</span><br><b>elif</b> (else if): checks another condition when the one above was False. You can have as many as you need.</div>
+<div class="tip">With <code>if</code> / <code>elif</code> and no <code>else</code>, empty squares are simply skipped.</div>`,
+    blocks:["for i in range(6):","move_forward()",'if tile() == "crystal":','elif tile() == "ice":',"collect()","drill()"],
+    starter:``,
+    worlds:[{map:["........","SC.I.CI.","........"],dir:1},{map:["........","S.ICC.I.","........"],dir:1},{map:["........","SII.C.C.","........"],dir:1}],
+    goals:["crystals","ice"], requires:[{re:/\bfor\b/,msg:"Use a <code>for</code> loop."},{re:/\belif\b/,msg:"Use <code>elif</code> for the ice."}],
+    hints:["Order: the loop, then move_forward(), then the if, then the elif.","The if and elif line up (4 spaces). collect() and drill() go 8 spaces in."],
+    solution:`for i in range(6):
+    move_forward()
+    if tile() == "crystal":
+        collect()
+    elif tile() == "ice":
+        drill()
+` },
+
+  { id:"m7", mode:"build", title:"Rock blaster", pills:["BUILD","SEL"], stars:2, cmds:["move_forward","blast","rock_ahead"],
+    body:`<p>Rocks are in the way, in a different place in each world. If the rover drives into a rock, it crashes!</p>
+<p>Each time round: if there is a rock ahead, blast it. Then drive forward.</p>
+<div class="tip"><b>Careful:</b> should <code>move_forward()</code> be inside the <code>if</code> or not? Watch what happens in each world.</div>`,
+    blocks:["for i in range(8):","if rock_ahead():","blast()","move_forward()"],
+    starter:``,
+    worlds:[{map:["..........","S.R..R..B.",".........."],dir:1},{map:["..........","SR..RR..B.",".........."],dir:1},{map:["..........","S...R..RB.",".........."],dir:1}],
+    goals:["beacon"], requires:[{re:/\bif\b/,msg:"Use an <code>if</code> with <code>rock_ahead()</code>."}],
+    hints:["blast() goes inside the if (8 spaces).","move_forward() must happen every time, so it lines up with the if (4 spaces), not inside it."],
+    solution:`for i in range(8):
+    if rock_ahead():
+        blast()
+    move_forward()
+` },
+
+  /* ---------------- STAGE 3: WRITE ---------------- */
+  { id:"m8", mode:"write", title:"Turn the corner", pills:["WRITE","SEL"], stars:2, cmds:["move_forward","turn_right"],
+    body:`<p>Write it yourself! Use <b>one</b> loop of 8 moves to reach the landing pad. Use the counter <code>i</code> and an <code>if</code> to turn at the right moment.</p>
+<pre class="py" data-py>for i in range(1, 9):
+    move_forward()
+    # if i is ... turn right</pre>
+<div class="tip">From Lesson 6: <code>range(1, 9)</code> counts 1, 2, 3 … 8.</div>`,
+    starter:`# Write your program here
+`,
+    worlds:[{map:["S......",".....R.","..R....","R......","....B..","......."],dir:1}],
+    goals:["beacon"], requires:[{re:/\bfor\b/,msg:"Use a <code>for</code> loop."},{re:/\bif\b/,msg:"Use an <code>if</code> to decide when to turn."}],
+    hints:["After 4 moves the rover is above the column with the pad.","Inside the loop, after move_forward(): <code>if i == 4:</code> then (8 spaces) <code>turn_right()</code>"],
+    solution:`for i in range(1, 9):
+    move_forward()
+    if i == 4:
+        turn_right()
+` },
+
+  { id:"m9", mode:"write", title:"Beacon every other square", pills:["WRITE","SEL"], stars:3, cmds:["move_forward","place_beacon"],
+    body:`<p>Drive 10 squares. Drop a beacon on the <b>orange spots</b> only: every <b>even</b> square (2, 4, 6, 8, 10).</p>
+<div class="tip">From Lesson 7: <code>i % 2 == 0</code> is True when <code>i</code> is even.</div>`,
+    starter:`# Write your program here
+`,
+    worlds:[{map:["............","S.F.F.F.F.F.","............"],dir:1}],
+    goals:["flags"], requires:[{re:/\bfor\b/,msg:"Use a <code>for</code> loop."},{re:/\bif\b/,msg:"Use an <code>if</code> to choose the squares."}],
+    hints:["Loop from 1 to 10: <code>for i in range(1, 11):</code>","Move first, then check: <code>if i % 2 == 0:</code> and <code>place_beacon()</code>"],
+    solution:`for i in range(1, 11):
+    move_forward()
+    if i % 2 == 0:
+        place_beacon()
+` },
+
+  { id:"m10", mode:"write", title:"Grand mission", pills:["WRITE","SEL"], stars:3, cmds:["move_forward","collect","drill","blast","tile","rock_ahead"],
+    body:`<p>Everything at once! Drive 9 squares. Blast any rocks in your way, collect every crystal and drill every bit of ice. Each world is different.</p>
+<div class="tip">Plan it in steps: (1) rock in front? (2) move (3) what's under me?</div>`,
+    starter:`# Write your program here
+`,
+    worlds:[{map:["...........","SC.RI.CRI..","..........."],dir:1},{map:["...........","SRICR.C.IC.","..........."],dir:1},{map:["...........","S.IIRC.RC..","..........."],dir:1}],
+    goals:["crystals","ice"], requires:[{re:/\bfor\b/,msg:"Use a <code>for</code> loop."},{re:/\bif\b/,msg:"Use <code>if</code> to decide."}],
+    hints:["Start with <code>for i in range(9):</code>","First inside the loop: <code>if rock_ahead():</code> / <code>blast()</code>. Then <code>move_forward()</code>.","Then the Mission 6 pattern: <code>if tile() == \"crystal\":</code> … <code>elif tile() == \"ice\":</code> …"],
+    solution:`for i in range(9):
+    if rock_ahead():
+        blast()
+    move_forward()
+    if tile() == "crystal":
+        collect()
+    elif tile() == "ice":
+        drill()
+` },
+
+  { id:"finish", mode:"finish", title:"Mission report" }
+  ]
+};
+
+/* =====================================================================
+   APP
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const params = new URLSearchParams(location.search);
+const TEACHER = params.get("teacher") === "1";
+const M = COURSE.missions;
+let state = {cur:0, done:{}, code:{}, gaps:{}, fails:{}, hints:{}, name:""};
+try { const raw = localStorage.getItem(COURSE.id); if (raw) state = Object.assign(state, JSON.parse(raw)); } catch(e){}
+function save(){ try{ localStorage.setItem(COURSE.id, JSON.stringify(state)); }catch(e){} }
+if (params.has("mission")) state.cur = Math.max(0, Math.min(M.length-1, +params.get("mission")||0));
+
+/* ---------- highlighter ---------- */
+const KW="for|in|if|elif|else|while|and|or|not|True|False|None|def|return|import|from|break|continue|pass";
+const BI="print|input|int|str|range|len";
+const RV=Object.keys(CMD).join("|");
+const TOK=new RegExp(`(#.*$)|("(?:[^"\\\\\\n]|\\\\.)*"?|'(?:[^'\\\\\\n]|\\\\.)*'?)|\\b(\\d+)\\b|\\b(${KW})\\b|\\b(${BI})\\b|\\b(${RV})\\b`,"gm");
+function hlText(rest){
+  let out="",last=0,t; TOK.lastIndex=0;
+  while((t=TOK.exec(rest))){
+    out+=esc(rest.slice(last,t.index));
+    const cls=t[1]?"c":t[2]?"s":t[3]?"n":t[4]?"k":t[5]?"b":"r";
+    out+=`<span class="t-${cls}">${esc(t[0])}</span>`; last=t.index+t[0].length;
+    if(!t[0].length) TOK.lastIndex++;
+  }
+  return out+esc(rest.slice(last));
+}
+function indentHTML(n){ let pre="",k=0,l=0; while(k+4<=n){pre+=`<span class="${l%2?'ig2':'ig'}">    </span>`;k+=4;l++;} return pre+" ".repeat(n-k); }
+function hlLine(line){ const n=(line.match(/^ */)||[""])[0].length; return indentHTML(n)+hlText(line.slice(n)); }
+function hl(src,hlNo){ return src.split("\n").map((l,i)=>{const h=hlLine(l)||" ";return hlNo===i+1?`<span class="hlline">${h}</span>`:h;}).join("\n"); }
+
+/* =====================================================================
+   WORLD SIMULATION
+   ===================================================================== */
+const DX=[0,1,0,-1], DY=[-1,0,1,0];   // 0 up, 1 right, 2 down, 3 left
+class RoverError extends Error {}
+function makeWorld(def){
+  const grid=def.map.map(r=>r.split(""));
+  let rover=null;
+  grid.forEach((row,y)=>row.forEach((c,x)=>{ if(c==="S"){ rover={x,y,d:def.dir??1}; row[x]="."; } }));
+  const marks=def.map.map(r=>r.replace(/[^BF]/g,"."));
+  return {w:grid[0].length,h:grid.length,grid,marks,rover,placed:[],collected:0,drilled:0,blasted:0};
+}
+function cloneWorld(W){ return {...W, grid:W.grid.map(r=>r.slice()), rover:{...W.rover}, placed:W.placed.slice()}; }
+function snap(W){ return {grid:W.grid.map(r=>r.join("")), rover:{...W.rover}, placed:W.placed.slice()}; }
+function simCommands(W, events, lineRef){
+  const push=(type,extra={})=>{ events.push({type, line:lineRef.v, ...snap(W), ...extra}); if(events.length>600) fail("The rover ran out of power (more than 600 actions)."); };
+  const fail=msg=>{ events.push({type:"crash", line:lineRef.v, msg, ...snap(W)}); throw new RoverError(msg); };
+  const ahead=()=>({x:W.rover.x+DX[W.rover.d], y:W.rover.y+DY[W.rover.d]});
+  const inside=p=>p.x>=0&&p.y>=0&&p.x<W.w&&p.y<W.h;
+  const here=()=>W.grid[W.rover.y][W.rover.x];
+  return {
+    move_forward(){ const p=ahead(); if(!inside(p)) fail("The rover drove off the edge of the map!"); if(W.grid[p.y][p.x]==="R") fail("CRASH! The rover drove into a rock. Check with rock_ahead() and blast() it first."); W.rover.x=p.x; W.rover.y=p.y; push("move"); },
+    turn_left(){ W.rover.d=(W.rover.d+3)%4; push("turn"); },
+    turn_right(){ W.rover.d=(W.rover.d+1)%4; push("turn"); },
+    collect(){ if(here()!=="C") fail(`collect() on line ${lineRef.v}: there's no crystal on this square. Check with tile() first.`); W.grid[W.rover.y][W.rover.x]="."; W.collected++; push("collect"); },
+    drill(){ if(here()!=="I") fail(`drill() on line ${lineRef.v}: there's no ice on this square. Check with tile() first.`); W.grid[W.rover.y][W.rover.x]="."; W.drilled++; push("drill"); },
+    blast(){ const p=ahead(); if(!inside(p)||W.grid[p.y][p.x]!=="R") fail(`blast() on line ${lineRef.v}: there's no rock in front of the rover.`); W.grid[p.y][p.x]="."; W.blasted++; push("blast",{at:p}); },
+    place_beacon(){ const k=W.rover.x+","+W.rover.y; if(!W.placed.includes(k)) W.placed.push(k); push("beacon"); },
+    tile(){ const c=here(); return c==="C"?"crystal":c==="I"?"ice":"empty"; },
+    rock_ahead(){ const p=ahead(); return inside(p)&&W.grid[p.y][p.x]==="R"; }
+  };
+}
+function checkGoals(W, goals){
+  const fails=[];
+  const count=ch=>W.grid.reduce((n,r)=>n+r.filter(c=>c===ch).length,0);
+  for(const g of goals){
+    if(g==="beacon" && W.marks[W.rover.y][W.rover.x]!=="B") fails.push("The rover didn't finish on the landing pad.");
+    if(g==="crystals"){ const n=count("C"); if(n) fails.push(`${n} crystal${n>1?"s":""} still to collect.`); }
+    if(g==="ice"){ const n=count("I"); if(n) fails.push(`${n} ice block${n>1?"s":""} still to drill.`); }
+    if(g==="flags"){
+      const want=[]; W.marks.forEach((r,y)=>[...r].forEach((c,x)=>{ if(c==="F") want.push(x+","+y); }));
+      const miss=want.filter(k=>!W.placed.includes(k)).length, extra=W.placed.filter(k=>!want.includes(k)).length;
+      if(miss) fails.push(`${miss} orange spot${miss>1?"s":""} without a beacon.`);
+      if(extra) fails.push(`${extra} beacon${extra>1?"s":""} dropped in the wrong place.`);
+    }
+  }
+  return fails;
+}
+
+/* ---------- run Python against a world ---------- */
+function builtinRead(x){ if(Sk.builtinFiles===undefined||Sk.builtinFiles.files[x]===undefined) throw "File not found: '"+x+"'"; return Sk.builtinFiles.files[x]; }
+async function runInWorld(code, def, goals, outFn){
+  const W=makeWorld(def), events=[{type:"start",line:0,...snap(W)}], lineRef={v:0};
+  const api=simCommands(W, events, lineRef);
+  const py=Sk.builtin, none=py.none.none$;
+  for(const name of Object.keys(CMD)){
+    Sk.builtins[name]=new py.func(function(){
+      if(arguments.length) throw new py.TypeError(`${name}() doesn't need anything inside the brackets`);
+      const r=api[name]();
+      if(typeof r==="boolean") return r?py.bool.true$:py.bool.false$;
+      if(typeof r==="string") return new py.str(r);
+      return none;
+    });
+  }
+  Sk.configure({output:t=>outFn&&outFn(t), read:builtinRead, __future__:Sk.python3, execLimit:4000, yieldLimit:null,
+    inputfun:()=>"", inputfunTakesPrompt:true});
+  Sk.debugging=true;
+  Sk.breakpoints=(f,line)=>{ lineRef.v=line; return false; };
+  Sk.execStart=Date.now(); Sk.lastYield=Date.now();
+  let err=null;
+  try{
+    await Sk.misceval.asyncToPromise(()=>Sk.importMainWithBody("<stdin>",false,code,true));
+  }catch(e){ err=e; }
+  const roverMsg = err && (err instanceof RoverError ? err.message : (err.nativeError instanceof RoverError ? err.nativeError.message : null));
+  // Skulpt may wrap the JS error; pull our message out of the text if so
+  let rmsg=roverMsg;
+  if(err && !rmsg){ const last=events[events.length-1]; if(last.type==="crash") rmsg=last.msg; }
+  if(rmsg) err=null;
+  const goalsFail = (!err && !rmsg) ? checkGoals(W, goals||[]) : [];
+  return {events, err, rmsg, W, goalsFail};
+}
+
+/* ---------- friendly Python errors ---------- */
+function friendly(err, code){
+  const lines=code.split("\n");
+  let type=(err&&err.tp$name)||"Error", text="";
+  try{ text=err.toString(); }catch(e){ text=String(err); }
+  text=text.replace(/&gt;/g,">").replace(/&lt;/g,"<").replace(/&amp;/g,"&");
+  let lineNo=null; try{ if(err.traceback&&err.traceback.length) lineNo=err.traceback[0].lineno; }catch(e){}
+  const m=text.match(/on line (\d+)/); if(!lineNo&&m) lineNo=+m[1];
+  const ind=l=>(l.match(/^ */)||[""])[0].length;
+  let tip="";
+  if(/SyntaxError|IndentationError/.test(type)||/SyntaxError/.test(text)){
+    const colonIdx=lines.findIndex(l=>/^\s*(if|elif|else|for|while)\b/.test(l)&&!/:\s*(#.*)?$/.test(l));
+    const noIndIdx=lines.findIndex((l,i)=>/:\s*(#.*)?$/.test(l)&&lines[i+1]!==undefined&&lines[i+1].trim()!==""&&ind(lines[i+1])<=ind(l));
+    const eqIdx=lines.findIndex(l=>/^\s*(if|elif)\b[^=!<>]*[^=!<>]=[^=]/.test(l));
+    const qIdx=lines.findIndex(l=>((l.replace(/#.*/,"").match(/"/g)||[]).length%2)===1);
+    const brIdx=lines.findIndex(l=>(l.match(/\(/g)||[]).length!==(l.match(/\)/g)||[]).length);
+    const elseIdx=lines.findIndex(l=>/^\s*(else|elif)\b/.test(l));
+    if(colonIdx>=0){ lineNo=colonIdx+1; tip=`Line ${lineNo} starts with <code>${esc(lines[colonIdx].trim().split(/[\s(:]/)[0])}</code> so it must end with a colon <code>:</code>`; }
+    else if(noIndIdx>=0){ lineNo=noIndIdx+2; tip=`Line ${noIndIdx+1} ends with a colon, so line ${lineNo} must be indented 4 more spaces (press Tab).`; }
+    else if(eqIdx>=0){ lineNo=eqIdx+1; tip=`Line ${lineNo}: to compare use <code>==</code>. A single <code>=</code> stores a value.`; }
+    else if(qIdx>=0){ lineNo=qIdx+1; tip=`Line ${lineNo} is missing a speech mark <code>"</code>.`; }
+    else if(brIdx>=0){ lineNo=brIdx+1; tip=`Line ${lineNo}: the brackets don't match. Commands need <code>()</code> at the end.`; }
+    else if(/unindent|unexpected indent/i.test(text)){ tip="A line is indented when it shouldn't be, or the spaces don't line up. Use 4 spaces per level."; }
+    else if(elseIdx>=0){ tip="Check that <code>else</code> / <code>elif</code> lines up exactly with its <code>if</code>, and that <code>else</code> has no condition."; }
+    else tip="Python couldn't understand this line. Check spelling, colons, brackets and speech marks.";
+    type=/indent/i.test(text)?"IndentationError":"SyntaxError";
+  } else if(/NameError/.test(type)){
+    const nm=(text.match(/name '([^']+)'/)||[])[1]||"?";
+    const near=Object.keys(CMD).find(c=>c.replace(/_/g,"")===nm.toLowerCase().replace(/_/g,""));
+    tip=`Python doesn't know <code>${esc(nm)}</code>.`+(near?` Did you mean <code>${near}()</code>?`:" Check the spelling and the underscores _.");
+  } else if(/TypeError/.test(type)){
+    if(/doesn't need anything/.test(text)) tip="Rover commands have empty brackets, like <code>move_forward()</code>. Use a loop to repeat.";
+    else if(/not callable/.test(text)) tip="Something is being used like a command when it isn't.";
+    else tip="Check the brackets on that line.";
+  } else if(/TimeLimit/.test(type)){ tip="Your program ran for too long."; }
+  return `<b>${esc(type)}${lineNo?` on line ${lineNo}`:""}</b>${tip?`<br>💡 ${tip}`:""}<br><small style="opacity:.6">${esc(text.replace(/\s*on line \d+/,""))}</small>`;
+}
+
+/* =====================================================================
+   CANVAS RENDERER
+   ===================================================================== */
+const R = { cv:null, ctx:null, cell:56, W:null, base:null, from:null, to:null, t0:0, dur:300, fx:[], raf:0, playing:false, shake:0 };
+function rand(x,y,k){ const s=Math.sin(x*127.1+y*311.7+k*74.7)*43758.5453; return s-Math.floor(s); }
+function setupCanvas(def){
+  const W=makeWorld(def); R.base=W;
+  const wrap=$(".stagewrap"); const maxW=wrap.clientWidth-20, maxH=Math.max(200, Math.min(window.innerHeight*0.5, 470));
+  R.cell=Math.max(28, Math.min(76, Math.floor(Math.min(maxW/W.w, maxH/W.h))));
+  const dpr=window.devicePixelRatio||1;
+  R.cv.width=W.w*R.cell*dpr; R.cv.height=W.h*R.cell*dpr; R.cv.style.width=W.w*R.cell+"px"; R.cv.style.height=W.h*R.cell+"px";
+  R.ctx.setTransform(dpr,0,0,dpr,0,0);
+  R.cur={...snap(W)}; R.from=R.cur; R.to=R.cur; R.fx=[]; R.marks=W.marks; R.dims={w:W.w,h:W.h};
+  if(!R.raf) loop();
+}
+function loop(){ R.raf=requestAnimationFrame(loop); draw(performance.now()); }
+function drawGround(c,w,h,S){
+  for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+    const px=x*S,py=y*S;
+    c.fillStyle=(x+y)%2?"#2a2361":"#2f2869"; c.fillRect(px,py,S,S);
+    for(let k=0;k<3;k++){ if(rand(x,y,k)>.55){ const r=S*(.05+.07*rand(x,y,k+9)); const cx=px+S*(.15+.7*rand(x,y,k+3)), cy=py+S*(.15+.7*rand(x,y,k+5));
+      c.fillStyle="rgba(10,6,40,.35)"; c.beginPath(); c.arc(cx,cy,r,0,7); c.fill();
+      c.strokeStyle="rgba(170,160,255,.18)"; c.lineWidth=1; c.beginPath(); c.arc(cx-.5,cy-.5,r,3.6,5.9); c.stroke(); } }
+  }
+  c.strokeStyle="rgba(110,230,255,.12)"; c.lineWidth=1;
+  for(let x=0;x<=w;x++){ c.beginPath(); c.moveTo(x*S+.5,0); c.lineTo(x*S+.5,h*S); c.stroke(); }
+  for(let y=0;y<=h;y++){ c.beginPath(); c.moveTo(0,y*S+.5); c.lineTo(w*S,y*S+.5); c.stroke(); }
+}
+function drawPad(c,x,y,S,t){
+  const cx=x*S+S/2, cy=y*S+S/2, p=(Math.sin(t/300)+1)/2;
+  c.save(); c.shadowColor="#22d3c5"; c.shadowBlur=12+8*p;
+  c.strokeStyle="#22d3c5"; c.lineWidth=3; c.beginPath(); c.arc(cx,cy,S*.36,0,7); c.stroke(); c.restore();
+  c.strokeStyle="rgba(34,211,197,"+(.25+.4*p)+")"; c.lineWidth=2; c.beginPath(); c.arc(cx,cy,S*.36+5*p,0,7); c.stroke();
+  c.fillStyle="#22d3c5"; c.font=`900 ${S*.32}px system-ui`; c.textAlign="center"; c.textBaseline="middle"; c.fillText("H",cx,cy+1);
+}
+function drawSpot(c,x,y,S,t){
+  const cx=x*S+S/2, cy=y*S+S/2;
+  c.save(); c.setLineDash([5,5]); c.lineDashOffset=-t/60; c.strokeStyle="#ff8a3d"; c.lineWidth=2.5; c.beginPath(); c.arc(cx,cy,S*.3,0,7); c.stroke(); c.restore();
+}
+function drawCrystal(c,x,y,S,t){
+  const cx=x*S+S/2, cy=y*S+S/2+Math.sin(t/400+x)*2, s=S*.26;
+  c.save(); c.shadowColor="#ff5fa2"; c.shadowBlur=14;
+  const g=c.createLinearGradient(cx-s,cy-s,cx+s,cy+s); g.addColorStop(0,"#ffb3d6"); g.addColorStop(.5,"#ff5fa2"); g.addColorStop(1,"#a3238f");
+  c.fillStyle=g; c.beginPath(); c.moveTo(cx,cy-s*1.25); c.lineTo(cx+s*.8,cy-s*.2); c.lineTo(cx,cy+s*1.2); c.lineTo(cx-s*.8,cy-s*.2); c.closePath(); c.fill(); c.restore();
+  c.fillStyle="rgba(255,255,255,.65)"; c.beginPath(); c.moveTo(cx,cy-s*1.25); c.lineTo(cx-s*.8,cy-s*.2); c.lineTo(cx-s*.15,cy-s*.2); c.closePath(); c.fill();
+}
+function drawIce(c,x,y,S){
+  const cx=x*S+S/2, cy=y*S+S/2, r=S*.32;
+  const g=c.createLinearGradient(cx,cy-r,cx,cy+r); g.addColorStop(0,"#e9fbff"); g.addColorStop(1,"#7cc8ef");
+  c.fillStyle=g; c.strokeStyle="#bfefff"; c.lineWidth=2; c.beginPath();
+  for(let k=0;k<6;k++){ const a=Math.PI/3*k+Math.PI/6; c.lineTo(cx+r*Math.cos(a), cy+r*Math.sin(a)); } c.closePath(); c.fill(); c.stroke();
+  c.strokeStyle="rgba(60,130,180,.5)"; c.lineWidth=1.5; c.beginPath(); c.moveTo(cx-r*.3,cy-r*.4); c.lineTo(cx+r*.1,cy); c.lineTo(cx-r*.1,cy+r*.4); c.stroke();
+}
+function drawRock(c,x,y,S){
+  const cx=x*S+S/2, cy=y*S+S/2, r=S*.36;
+  c.fillStyle="rgba(0,0,0,.35)"; c.beginPath(); c.ellipse(cx+3,cy+r*.6,r,r*.35,0,0,7); c.fill();
+  c.fillStyle="#8b86a8"; c.beginPath();
+  for(let k=0;k<8;k++){ const a=Math.PI/4*k, rr=r*(.78+.3*rand(x,y,k)); c.lineTo(cx+rr*Math.cos(a), cy+rr*Math.sin(a)*.85); } c.closePath(); c.fill();
+  c.fillStyle="#b9b4d4"; c.beginPath(); c.ellipse(cx-r*.25,cy-r*.3,r*.35,r*.2,-.5,0,7); c.fill();
+  c.fillStyle="#5d587c"; c.beginPath(); c.arc(cx+r*.25,cy+r*.15,r*.12,0,7); c.fill();
+}
+function drawBeacon(c,x,y,S,t){
+  const cx=x*S+S/2, cy=y*S+S/2;
+  c.strokeStyle="#ddd"; c.lineWidth=3; c.beginPath(); c.moveTo(cx,cy+S*.25); c.lineTo(cx,cy-S*.22); c.stroke();
+  const on=Math.floor(t/400)%2;
+  c.save(); c.shadowColor="#ff8a3d"; c.shadowBlur=on?18:4; c.fillStyle=on?"#ffb070":"#ff8a3d"; c.beginPath(); c.arc(cx,cy-S*.25,S*.09,0,7); c.fill(); c.restore();
+  c.fillStyle="#ff8a3d"; c.beginPath(); c.moveTo(cx,cy-S*.18); c.lineTo(cx+S*.22,cy-S*.1); c.lineTo(cx,cy-S*.02); c.fill();
+}
+function drawRover(c,px,py,ang,S,t){
+  c.save(); c.translate(px,py); c.rotate(ang); const s=S/56;
+  c.scale(s,s);
+  c.fillStyle="rgba(0,0,0,.35)"; c.beginPath(); c.ellipse(3,4,22,20,0,0,7); c.fill();
+  c.fillStyle="#120f2b"; [[-20,-15],[-20,7],[12,-15],[12,7]].forEach(([wx,wy])=>{ c.beginPath(); c.roundRect(wx-2,wy-2,12,12,3); c.fill(); });
+  // body (rover faces +x)
+  const g=c.createLinearGradient(0,-16,0,16); g.addColorStop(0,"#ffb070"); g.addColorStop(1,"#f06a1f");
+  c.fillStyle=g; c.beginPath(); c.roundRect(-17,-13,32,26,7); c.fill();
+  c.fillStyle="rgba(255,255,255,.25)"; c.beginPath(); c.roundRect(-14,-11,26,6,3); c.fill();
+  // solar panel
+  c.fillStyle="#2b2a6e"; c.fillRect(-13,-6,13,12); c.strokeStyle="#6fe3ff"; c.lineWidth=.8;
+  for(let k=0;k<3;k++){ c.beginPath(); c.moveTo(-13+k*4.3,-6); c.lineTo(-13+k*4.3,6); c.stroke(); }
+  // sensor head
+  c.fillStyle="#22d3c5"; c.beginPath(); c.roundRect(5,-9,13,18,5); c.fill();
+  c.fillStyle="#0e0b24"; c.beginPath(); c.arc(13,-4,2.6,0,7); c.arc(13,4,2.6,0,7); c.fill();
+  const blink=(Math.floor(t/700)%5===0)?1:0;
+  c.fillStyle=blink?"#22d3c5":"#fff"; c.beginPath(); c.arc(13.8,-4.5,1,0,7); c.arc(13.8,3.5,1,0,7); c.fill();
+  // antenna
+  c.strokeStyle="#ddd"; c.lineWidth=1.5; c.beginPath(); c.moveTo(-8,8); c.lineTo(-14,16); c.stroke();
+  c.fillStyle="#ff5fa2"; c.beginPath(); c.arc(-14,16,2.2,0,7); c.fill();
+  c.restore();
+}
+function draw(t){
+  if(!R.ctx||!R.dims) return;
+  const c=R.ctx, S=R.cell, {w,h}=R.dims;
+  let k=R.playing||R.dur?Math.min(1,(t-R.t0)/R.dur):1; if(!isFinite(k)) k=1;
+  const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+  c.save();
+  if(R.shake>0){ c.translate((Math.random()-.5)*R.shake,(Math.random()-.5)*R.shake); R.shake*=.9; if(R.shake<.4) R.shake=0; }
+  drawGround(c,w,h,S);
+  R.marks.forEach((row,y)=>[...row].forEach((ch,x)=>{ if(ch==="B") drawPad(c,x,y,S,t); if(ch==="F") drawSpot(c,x,y,S,t); }));
+  const G=(k<1?R.from:R.to).grid;  // items disappear at end of step
+  const G2=R.to.grid;
+  for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+    const ch=(R.to.type==="blast"||R.to.type==="collect"||R.to.type==="drill") && k<.5 ? R.from.grid[y][x] : G2[y][x];
+    if(ch==="C") drawCrystal(c,x,y,S,t); else if(ch==="I") drawIce(c,x,y,S); else if(ch==="R") drawRock(c,x,y,S);
+  }
+  (R.to.placed||[]).forEach(p=>{ const [x,y]=p.split(",").map(Number); drawBeacon(c,x,y,S,t); });
+  // trail
+  if(R.trail&&R.trail.length){ c.fillStyle="rgba(111,227,255,.35)"; R.trail.forEach(p=>{ c.beginPath(); c.arc(p.x*S+S/2,p.y*S+S/2,S*.05,0,7); c.fill(); }); }
+  // rover
+  const a=R.from.rover, b=R.to.rover;
+  let a0=(a.d-1)*Math.PI/2, a1=(b.d-1)*Math.PI/2; let da=a1-a0; if(da>Math.PI) da-=2*Math.PI; if(da<-Math.PI) da+=2*Math.PI;
+  let rx=a.x+(b.x-a.x)*e, ry=a.y+(b.y-a.y)*e;
+  if(R.to.type==="crash" && R.to.bump){ const q=Math.sin(k*Math.PI)*.35; rx=a.x+DX[a.d]*q; ry=a.y+DY[a.d]*q; }
+  drawRover(c, rx*S+S/2, ry*S+S/2, a0+da*e, S, t);
+  // fx
+  R.fx=R.fx.filter(f=>t-f.t<f.life);
+  for(const f of R.fx){
+    const p=(t-f.t)/f.life;
+    if(f.kind==="spark"){ for(let i=0;i<10;i++){ const an=i/10*6.28+f.seed, r=S*.15+S*.5*p; c.fillStyle=`rgba(255,${120+i*10},200,${1-p})`; c.beginPath(); c.arc(f.x*S+S/2+Math.cos(an)*r, f.y*S+S/2+Math.sin(an)*r-S*.3*p, 3*(1-p)+1,0,7); c.fill(); } }
+    if(f.kind==="shatter"){ for(let i=0;i<8;i++){ const an=i/8*6.28, r=S*.1+S*.45*p; c.fillStyle=`rgba(200,240,255,${1-p})`; c.fillRect(f.x*S+S/2+Math.cos(an)*r-3, f.y*S+S/2+Math.sin(an)*r-3,6,6); } }
+    if(f.kind==="boom"){ c.save(); c.globalAlpha=1-p; c.fillStyle="#ffcf70"; c.beginPath(); c.arc(f.x*S+S/2,f.y*S+S/2,S*(.2+.55*p),0,7); c.fill(); c.strokeStyle="#ff8a3d"; c.lineWidth=4; c.beginPath(); c.arc(f.x*S+S/2,f.y*S+S/2,S*(.3+.7*p),0,7); c.stroke(); c.restore(); }
+    if(f.kind==="crash"){ c.fillStyle=`rgba(224,65,58,${.35*(1-p)})`; c.fillRect(0,0,w*S,h*S); }
+    if(f.kind==="ping"){ c.strokeStyle=`rgba(34,211,197,${1-p})`; c.lineWidth=3; c.beginPath(); c.arc(f.x*S+S/2,f.y*S+S/2,S*(.3+1.2*p),0,7); c.stroke(); }
+  }
+  c.restore();
+}
+function showSnap(ev){ R.from=ev; R.to=ev; R.t0=0; R.dur=0; }
+function stepTo(prev, ev, dur){
+  R.from=prev; R.to=ev; R.t0=performance.now(); R.dur=dur;
+  const now=R.t0, r=ev.rover;
+  if(ev.type==="move"){ R.trail.push({x:prev.rover.x,y:prev.rover.y}); }
+  if(ev.type==="collect") R.fx.push({kind:"spark",x:r.x,y:r.y,t:now+dur*.4,life:700,seed:Math.random()});
+  if(ev.type==="drill") R.fx.push({kind:"shatter",x:r.x,y:r.y,t:now+dur*.4,life:600});
+  if(ev.type==="blast") R.fx.push({kind:"boom",x:ev.at.x,y:ev.at.y,t:now+dur*.3,life:600});
+  if(ev.type==="beacon") R.fx.push({kind:"ping",x:r.x,y:r.y,t:now,life:700});
+  if(ev.type==="crash"){ R.fx.push({kind:"crash",t:now,life:900}); R.shake=10; ev.bump=/rock|edge/.test(ev.msg); }
+}
+
+/* =====================================================================
+   UI
+   ===================================================================== */
+let curWorld=0, running=false, stopFlag=false, editor=null;
+function renderDots(){
+  const done=M.filter(m=>state.done[m.id]).length;
+  let h="";
+  M.forEach((m,i)=>{
+    if(i>0 && M[i-1].mode!==m.mode && m.mode!=="finish") h+=`<span class="stage-sep"></span>`;
+    h+=`<button class="dot ${state.done[m.id]?'done':''} ${i===state.cur?'cur':''}" title="${esc(m.title)}" data-i="${i}">${i===0?"★":i===M.length-1?"✓":i}</button>`;
+  });
+  $("#dots").innerHTML=h;
+  $("#progtxt").textContent=`${done} of ${M.length} complete`;
+  $("#progbar").style.width=(100*done/M.length)+"%";
+  $("#slideno").textContent=state.cur===0?"Start":state.cur===M.length-1?"Report":`Mission ${state.cur} of ${M.length-2}`;
+  $("#prev").disabled=state.cur===0; $("#next").disabled=state.cur===M.length-1;
+}
+$("#dots").addEventListener("click",e=>{const b=e.target.closest(".dot"); if(b) go(+b.dataset.i);});
+$("#prev").onclick=()=>go(state.cur-1); $("#next").onclick=()=>go(state.cur+1);
+function go(i){ if(i<0||i>=M.length) return; stopFlag=true; state.cur=i; curWorld=0; save(); render(); }
+function markDone(id){ if(!state.done[id]){ state.done[id]=true; save(); renderDots(); } }
+
+const PILL={SELECT:"Stage 1 · Select",BUILD:"Stage 2 · Build",WRITE:"Stage 3 · Write",SEL:"Selection",IT:"Iteration",START:"Start here"};
+const GOAL_TXT={beacon:["Finish on the landing pad","#22d3c5"],crystals:["Collect every crystal","#ff5fa2"],ice:["Drill every block of ice","#7cc8ef"],flags:["Drop a beacon on every orange spot","#ff8a3d"]};
+function goalIcon(col){ return `<svg width="20" height="20"><circle cx="10" cy="10" r="7" fill="none" stroke="${col}" stroke-width="3"/></svg>`; }
+
+function render(){
+  const m=M[state.cur]; renderDots();
+  $("#main").classList.toggle("full", m.mode==="finish");
+  const c=$("#content"); c.scrollTop=0;
+  if(m.mode==="finish") return renderFinish(c);
+  let h=`<div class="pills">${(m.pills||[]).map(p=>`<span class="pill ${p}">${PILL[p]}</span>`).join("")}${m.stars?`<span class="stars">${"★".repeat(m.stars)}</span>`:""}</div>`;
+  h+=`<h1>${state.cur?`Mission ${state.cur}: `:""}${esc(m.title)}</h1>${m.body}`;
+  if(m.goals&&m.goals.length) h+=`<h2>Goal</h2><ul class="goals">${m.goals.map(g=>`<li>${goalIcon(GOAL_TXT[g][1])}${GOAL_TXT[g][0]}</li>`).join("")}${m.worlds.length>1?`<li>${goalIcon("#4b47c9")}Works in all ${m.worlds.length} worlds</li>`:""}</ul>`;
+  h+=`<h2>Commands</h2><div class="cmds">${m.cmds.map(k=>`<div class="cmd"><code>${CMD[k].sig}</code><span>${CMD[k].txt}</span></div>`).join("")}</div>`;
+  if(m.hints) h+=`<div class="hints" id="hints"></div>`;
+  c.innerHTML=h;
+  c.querySelectorAll("pre[data-py]").forEach(p=>p.innerHTML=hl(p.textContent));
+  if(m.hints) renderHints(m);
+  renderRight(m);
+}
+function renderHints(m){
+  const n=state.hints[m.id]||0, box=$("#hints"); if(!box) return;
+  let h="";
+  for(let k=0;k<n&&k<m.hints.length;k++) h+=`<div class="hint"><b>Hint ${k+1}:</b> ${m.hints[k]}</div>`;
+  h+=`<div style="display:flex;gap:8px;flex-wrap:wrap">`;
+  if(n<m.hints.length) h+=`<button class="btn sm orange" id="hintbtn">💡 Hint (${n}/${m.hints.length})</button>`;
+  const can=TEACHER||state.done[m.id]||(n>=m.hints.length&&(state.fails[m.id]||0)>=3);
+  h+=`<button class="btn sm" id="solbtn" ${can?"":"disabled title='Unlocks after all hints and 3 tries'"}>Solution</button></div><div id="solbox"></div>`;
+  box.innerHTML=h;
+  const hb=$("#hintbtn"); if(hb) hb.onclick=()=>{ state.hints[m.id]=n+1; save(); renderHints(m); };
+  $("#solbtn").onclick=()=>{ $("#solbox").innerHTML=`<pre class="py">${hl(m.solution.trimEnd())}</pre>`; };
+}
+
+function renderRight(m){
+  const Rp=$("#right");
+  const tabs=m.worlds.map((_,i)=>`<button class="wtab ${i===curWorld?'on':''}" data-w="${i}">World ${i+1}<span class="r" id="wr${i}"></span></button>`).join("");
+  let code="";
+  if(m.mode==="select") code=`<div class="pick" id="pick"></div><div class="tray"><span class="lbl">Choose</span>${m.chips.map((c,i)=>`<button class="chip" data-c="${i}">${esc(c)}</button>`).join("")}</div>`;
+  else {
+    code=`<div class="edwrap"><div class="gutter" id="gutter"></div><div class="ed"><pre id="hlpre" aria-hidden="true"></pre><textarea id="ta" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" aria-label="Python code"></textarea></div></div>`;
+    if(m.mode==="build") code+=`<div class="tray"><span class="lbl">Blocks</span>${m.blocks.map((b,i)=>`<button class="chip blk ${/:$/.test(b)?'ctl':''}" data-b="${i}">${esc(b)}</button>`).join("")}</div>`;
+  }
+  Rp.innerHTML=`
+  <div class="toolbar"><div class="worlds">${tabs}</div>
+    <label class="speed">🐢<input type="range" id="spd" min="1" max="5" value="${state.speed||3}">🐇</label>
+    <button class="tb" id="resetbtn" title="Put the rover back">↺ Reset</button>
+    <button class="tb run" id="runbtn" title="Ctrl+Enter">▶ Run</button></div>
+  <div class="stagewrap"><canvas id="world"></canvas><div class="status" id="status"></div></div>
+  <div class="codezone">${code}</div>
+  <div class="log" id="log"><div class="sys">${m.mode==="select"?"Fill the gaps, then press ▶ Run.":m.mode==="build"?"Click blocks to build your program, then press ▶ Run.":"Press ▶ Run (or Ctrl+Enter)."}</div></div>`;
+  R.cv=$("#world"); R.ctx=R.cv.getContext("2d"); R.trail=[];
+  setupCanvas(m.worlds[curWorld]);
+  Rp.querySelectorAll(".wtab").forEach(b=>b.onclick=()=>{ if(running) return; curWorld=+b.dataset.w; Rp.querySelectorAll(".wtab").forEach(x=>x.classList.toggle("on",x===b)); R.trail=[]; setupCanvas(m.worlds[curWorld]); setStatus(""); });
+  $("#spd").oninput=e=>{ state.speed=+e.target.value; save(); };
+  $("#runbtn").onclick=()=>running?(stopFlag=true):run(m);
+  $("#resetbtn").onclick=()=>{ if(running) return; R.trail=[]; setupCanvas(m.worlds[curWorld]); setStatus(""); hlCurrent(0); };
+  if(m.mode==="select") setupPick(m); else setupEditor(m);
+}
+
+/* ---------- select mode ---------- */
+let selGap=0;
+function getGaps(m){ return state.gaps[m.id]||(state.gaps[m.id]=[]); }
+function setupPick(m){
+  const gaps=getGaps(m), nGaps=(m.template.match(/\{\{\d+\}\}/g)||[]).length;
+  selGap=gaps.findIndex((g,i)=>!g); if(selGap<0) selGap=[...Array(nGaps).keys()].find(i=>!gaps[i]) ?? 0;
+  drawPick(m);
+  $("#right").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{
+    if(running) return;
+    gaps[selGap]=m.chips[+b.dataset.c]; save();
+    const next=[...Array(nGaps).keys()].find(i=>!gaps[i]); if(next!==undefined) selGap=next;
+    drawPick(m);
+  });
+}
+function drawPick(m, hlNo){
+  const gaps=getGaps(m);
+  const html=m.template.split("\n").map((line,li)=>{
+    const n=(line.match(/^ */)||[""])[0].length; let rest=line.slice(n), out=indentHTML(n);
+    rest.split(/(\{\{\d+\}\})/).forEach(part=>{
+      const g=part.match(/\{\{(\d+)\}\}/);
+      if(g){ const i=+g[1], v=gaps[i]; out+=`<button class="gap ${v?'filled':''} ${i===selGap?'sel':''}" data-g="${i}">${v?hlText(v):"&nbsp;?&nbsp;"}</button>`; }
+      else out+=hlText(part);
+    });
+    return `<span class="ln ${hlNo===li+1?'hl':''}">${out||" "}</span>`;
+  }).join("");
+  const p=$("#pick"); p.innerHTML=html;
+  p.querySelectorAll(".gap").forEach(b=>b.onclick=()=>{ if(running) return; const i=+b.dataset.g; if(selGap===i&&gaps[i]){ gaps[i]=null; save(); } selGap=i; drawPick(m); });
+}
+function pickCode(m){ const gaps=getGaps(m); let missing=false; const code=m.template.replace(/\{\{(\d+)\}\}/g,(_,i)=>{ if(!gaps[+i]) missing=true; return gaps[+i]||""; }); return missing?null:code; }
+
+/* ---------- editor mode ---------- */
+function setupEditor(m){
+  const ta=$("#ta"), pre=$("#hlpre"), gut=$("#gutter");
+  ta.value=state.code[m.id]!==undefined?state.code[m.id]:m.starter;
+  let tmr=null, hlNo=0;
+  const paint=()=>{ pre.innerHTML=hl(ta.value,hlNo)+"\n"; gut.textContent=Array.from({length:ta.value.split("\n").length},(_,i)=>i+1).join("\n"); };
+  const changed=()=>{ paint(); clearTimeout(tmr); tmr=setTimeout(()=>{ state.code[m.id]=ta.value; save(); },300); };
+  ta.addEventListener("input",changed);
+  ta.addEventListener("scroll",()=>{ pre.scrollTop=ta.scrollTop; pre.scrollLeft=ta.scrollLeft; gut.scrollTop=ta.scrollTop; });
+  ta.addEventListener("keydown",e=>editorKeys(e,ta,changed));
+  editor={ta,paint,setHL:n=>{hlNo=n;paint();}};
+  paint();
+  if(m.mode==="build") $("#right").querySelectorAll(".chip.blk").forEach(b=>b.onclick=()=>{
+    if(running) return;
+    insertBlock(ta, m.blocks[+b.dataset.b]); changed(); ta.focus();
+  });
+}
+function insertBlock(ta, text){
+  const v=ta.value, a=ta.selectionStart;
+  if(v.trim()===""){ ta.value=text; ta.selectionStart=ta.selectionEnd=text.length; return; }
+  const ls=v.lastIndexOf("\n",a-1)+1, le=v.indexOf("\n",a)===-1?v.length:v.indexOf("\n",a);
+  const line=v.slice(ls,le);
+  if(line.trim()===""){ // fill the empty line, keep its indentation
+    const ind=line; const nv=v.slice(0,ls)+ind+text+v.slice(le); ta.value=nv; const pos=ls+ind.length+text.length; ta.selectionStart=ta.selectionEnd=pos; return;
+  }
+  let ind=(line.match(/^ */)||[""])[0]; if(/:\s*$/.test(line)) ind+="    ";
+  const ins="\n"+ind+text; ta.value=v.slice(0,le)+ins+v.slice(le); const pos=le+ins.length; ta.selectionStart=ta.selectionEnd=pos;
+}
+function editorKeys(e,ta,changed){
+  const v=ta.value,a=ta.selectionStart,b=ta.selectionEnd, ls=v.lastIndexOf("\n",a-1)+1;
+  if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){ e.preventDefault(); $("#runbtn").click(); return; }
+  if(e.key==="Tab"){
+    e.preventDefault();
+    if(a!==b&&v.slice(a,b).includes("\n")){ const blk=v.slice(ls,b); const nb=e.shiftKey?blk.replace(/^ {1,4}/gm,""):blk.replace(/^/gm,"    "); ta.value=v.slice(0,ls)+nb+v.slice(b); ta.selectionStart=ls; ta.selectionEnd=ls+nb.length; }
+    else if(e.shiftKey){ const mm=v.slice(ls).match(/^ {1,4}/); if(mm){ ta.value=v.slice(0,ls)+v.slice(ls+mm[0].length); ta.selectionStart=ta.selectionEnd=Math.max(ls,a-mm[0].length);} }
+    else { const mm=v.slice(ls,a); if(/^ *$/.test(mm)||true) ta.setRangeText("    ",a,b,"end"); }
+    changed(); return;
+  }
+  if(e.key==="Enter"){ e.preventDefault(); const line=v.slice(ls,a); let ind=(line.match(/^ */)||[""])[0]; if(/:\s*(#.*)?$/.test(line)) ind+="    "; ta.setRangeText("\n"+ind,a,b,"end"); changed(); return; }
+  if(e.key==="Backspace"&&a===b&&a>ls){ const before=v.slice(ls,a); if(/^ +$/.test(before)){ e.preventDefault(); const del=((before.length-1)%4)+1; ta.setRangeText("",a-del,a,"end"); changed(); } }
+}
+function hlCurrent(n){ const m=M[state.cur]; if(m.mode==="select") drawPick(m,n); else if(editor) editor.setHL(n); }
+
+/* ---------- log / status ---------- */
+function log(html,cls){ const d=document.createElement("div"); d.className=cls; d.innerHTML=html; $("#log").appendChild(d); $("#log").scrollTop=1e9; }
+function setStatus(txt,cls){ $("#status").innerHTML=txt?`<span class="${cls||''}">${txt}</span>`:""; }
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ---------- run ---------- */
+function getCode(m){ return m.mode==="select"?pickCode(m):editor.ta.value; }
+async function run(m){
+  const code=getCode(m);
+  $("#log").innerHTML="";
+  if(code===null){ log("Fill every gap before you run.","err"); return; }
+  if(!code.trim()){ log("Your program is empty. Add some code first.","err"); return; }
+  if(m.mode!=="select"){ state.code[m.id]=code; save(); }
+  running=true; stopFlag=false;
+  $("#runbtn").textContent="■ Stop"; $("#runbtn").className="tb stop";
+  for(let i=0;i<m.worlds.length;i++) $("#wr"+i).textContent="";
+  try{
+    const res=await runInWorld(code, m.worlds[curWorld], m.goals, t=>log(esc(t),"out"));
+    R.trail=[]; setupCanvas(m.worlds[curWorld]);
+    // animate
+    const speedMs=[0,650,450,300,170,70][state.speed||3];
+    let prev=res.events[0]; showSnap(prev); setStatus("");
+    for(let k=1;k<res.events.length;k++){
+      if(stopFlag) break;
+      const ev=res.events[k];
+      hlCurrent(ev.line);
+      stepTo(prev,ev,ev.type==="crash"?500:speedMs);
+      await sleep(ev.type==="crash"?550:speedMs+20);
+      prev=ev;
+    }
+    hlCurrent(0);
+    if(stopFlag){ log("Stopped.","sys"); setStatus("Stopped"); return; }
+    let ok=false;
+    if(res.err){ log(friendly(res.err,code),"err"); setStatus("Program error","bad"); }
+    else if(res.rmsg){ log(`<b>Mission failed:</b> ${esc(res.rmsg)}`,"err"); setStatus("💥 Crashed!","bad"); }
+    else if(res.goalsFail.length){ log(`<b>Not yet:</b> ${res.goalsFail.map(esc).join(" ")}`,"err"); setStatus("Goal not reached","bad"); }
+    else { ok=true; setStatus(m.goals.length?"✓ Goal reached!":"✓ Program finished","good"); }
+    $("#wr"+curWorld).textContent=ok?" ✓":" ✗";
+    if(!ok){ state.fails[m.id]=(state.fails[m.id]||0)+1; save(); renderHints(m); return; }
+    if(!m.goals.length){ markDone(m.id); log("Nice driving! Press <b>Next →</b> when you're ready for Mission 1.","ok"); return; }
+    // test the other worlds silently
+    const others=[];
+    for(let i=0;i<m.worlds.length;i++){
+      if(i===curWorld) continue;
+      const r=await runInWorld(code, m.worlds[i], m.goals);
+      const good=!r.err&&!r.rmsg&&!r.goalsFail.length;
+      $("#wr"+i).textContent=good?" ✓":" ✗";
+      if(!good) others.push(`World ${i+1}: ${esc(r.rmsg||r.goalsFail.join(" ")||"error")}`);
+    }
+    if(others.length){
+      log(`<b>World ${curWorld+1} worked, but your code doesn't work everywhere yet.</b><br>${others.join("<br>")}<br>Click the ✗ world to watch what happens.`,"err");
+      state.fails[m.id]=(state.fails[m.id]||0)+1; save(); renderHints(m); return;
+    }
+    const src=code.replace(/#.*$/gm,"");
+    const miss=(m.requires||[]).find(r=>!r.re.test(src));
+    if(miss){ log(`<b>Goal reached!</b> One more thing: ${miss.msg}`,"err"); return; }
+    const first=!state.done[m.id];
+    markDone(m.id); renderHints(m);
+    log(`<b>🚀 Mission complete${m.worlds.length>1?` in all ${m.worlds.length} worlds`:""}!</b> <button class="btn sm orange" id="nextm" style="margin-left:8px">Next mission →</button>`,"ok");
+    $("#nextm").onclick=()=>go(state.cur+1);
+    confetti(first?90:30);
+  } finally {
+    running=false; const rb=$("#runbtn"); if(rb){ rb.textContent="▶ Run"; rb.className="tb run"; }
+  }
+}
+
+/* ---------- finish ---------- */
+function renderFinish(c){
+  const items=M.filter(m=>m.mode!=="finish"&&m.mode!=="play"), done=items.filter(m=>state.done[m.id]).length;
+  markDone("finish");
+  const stage=s=>{ const it=items.filter(m=>m.mode===s); return `${it.filter(m=>state.done[m.id]).length}/${it.length}`; };
+  c.innerHTML=`<h1>Mission report</h1>
+  <div class="kw"><span class="tag">What you used</span><br>
+  • <b>Iteration</b>: <code>for i in range(n):</code> repeats the indented code n times.<br>
+  • <b>Selection</b>: <code>if</code> / <code>elif</code> / <code>else</code> chooses what to do, using sensors like <code>tile()</code> and <code>rock_ahead()</code>.<br>
+  • An <code>if</code> inside a loop makes a new decision every time round, so one program works in <b>every</b> world.</div>
+  <div class="cert"><div style="letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-size:13px">Rover Academy</div>
+  <div class="big">Rover Pilot Licence</div><p>Awarded to</p>
+  <input id="nm" placeholder="type your name" value="${esc(state.name||"")}">
+  <p style="font-size:21px;margin-top:16px"><b>${done}</b> of ${items.length} missions · Select ${stage("select")} · Build ${stage("build")} · Write ${stage("write")}</p>
+  <div class="checklist">${items.map((m,i)=>`<div><span class="${state.done[m.id]?'yes':'no'}">${state.done[m.id]?'✓':'○'}</span> ${i+1}. ${esc(m.title)}</div>`).join("")}</div>
+  <p style="color:var(--muted);font-size:14px">${new Date().toLocaleString("en-GB",{dateStyle:"full",timeStyle:"short"})}</p></div>
+  <p style="text-align:center;margin-top:16px">Show this screen to your teacher. <button class="btn primary" onclick="window.print()">🖨 Print</button> <button class="btn" id="wipe">Start again</button></p>`;
+  $("#nm").addEventListener("input",e=>{ state.name=e.target.value; save(); });
+  let armed=false; $("#wipe").onclick=e=>{ if(!armed){ armed=true; e.target.textContent="Sure? This clears your work. Click again"; return; } state={cur:0,done:{},code:{},gaps:{},fails:{},hints:{},name:""}; save(); render(); };
+  if(done===items.length) confetti(120);
+}
+function confetti(n){
+  const box=document.createElement("div"); box.className="confetti"; const cols=["#22d3c5","#ff8a3d","#ff5fa2","#6fe3ff","#ffd166"];
+  for(let i=0;i<n;i++){ const p=document.createElement("i"); p.style.left=Math.random()*100+"vw"; p.style.background=cols[i%cols.length]; p.style.animationDelay=Math.random()*.5+"s"; p.style.animationDuration=(1.2+Math.random())+"s"; box.appendChild(p); }
+  document.body.appendChild(box); setTimeout(()=>box.remove(),2600);
+}
+function toast(msg){ const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2400); }
+window.addEventListener("resize",()=>{ const m=M[state.cur]; if(m.worlds&&!running) setupCanvas(m.worlds[curWorld]); });
+
+/* ---------- self test: every model solution in every world ---------- */
+window.__selfTest=async()=>{
+  const out=[];
+  for(const m of M.filter(x=>x.solution)){
+    for(const [i,w] of m.worlds.entries()){
+      const r=await runInWorld(m.solution,w,m.goals);
+      out.push({id:m.id,world:i+1,ok:!r.err&&!r.rmsg&&!r.goalsFail.length&&!(m.requires||[]).some(q=>!q.re.test(m.solution)),detail:r.rmsg||r.goalsFail.join(" ")||(r.err&&String(r.err))||""});
+    }
+  }
+  return out;
+};
+window.__runCode=async(code,id,w)=>{ const m=M.find(x=>x.id===id); const r=await runInWorld(code,m.worlds[w||0],m.goals); return {err:r.err?friendly(r.err,code).replace(/<[^>]+>/g," "):null, rmsg:r.rmsg, goals:r.goalsFail}; };
+render();
+</script>
+</body>
+</html>
